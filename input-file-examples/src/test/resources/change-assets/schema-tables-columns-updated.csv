@@ -1,0 +1,7 @@
+Full Name;Display Name;Asset Type;Domain Name;Community Name;is part of [Schema] > Name;is part of [Schema] > Domain Name;is part of [Schema] > Community Name;is part of [Table] > Name;is part of [Table] > Domain Name;is part of [Table] > Community Name
+SCHEMA_1;SCHEMA;Schema;Physical Domain;DBs Community;;
+TABLE_1;T1;Table;Physical Domain;DBs Community;SCHEMA_1;Physical Domain;DBs Community;;;;
+TABLE_2;T2;Table;Physical Domain;DBs Community;SCHEMA_1;Physical Domain;DBs Community;;;;
+TAB_1_COLUMN_1;C1;Column;Physical Domain;DBs Community;;;;TABLE_1;Physical Domain;DBs Community
+TAB_1_COLUMN_2;C2;Column;Physical Domain;DBs Community;;;;TABLE_1;Physical Domain;DBs Community
+TAB_2_COLUMN_1;C3;Column;Physical Domain;DBs Community;;;;TABLE_2;Physical Domain;DBs Community

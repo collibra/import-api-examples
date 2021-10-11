@@ -1,0 +1,10 @@
+[
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "EXT_SYSTEM",
+      "externalEntityId": "EXT_TABLE_1_COLUMN_1_ID"
+    },
+    "name": "TAB_1_COLUMN_1_NEW"
+  }
+]

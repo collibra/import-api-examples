@@ -1,0 +1,60 @@
+[
+  {
+    "resourceType": "Community",
+    "identifier": {
+      "name": "${6}"
+    }
+  },
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "${5}",
+      "community": {
+        "name": "${6}"
+      }
+    },
+    "type": {
+      "name": "${4}"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "${1}",
+      "domain": {
+        "name": "${5}",
+        "community": {
+          "name": "${6}"
+        }
+      }
+    },
+    "displayName": "${2}",
+    "type": {
+      "name": "${3}"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007043:SOURCE": [
+        {
+          "name": "${7}",
+          "domain": {
+            "name": "${8}",
+            "community": {
+              "name": "${9}"
+            }
+          }
+        }
+      ],
+      "00000000-0000-0000-0000-000000007042:TARGET": [
+        {
+          "name": "${10}",
+          "domain": {
+            "name": "${11}",
+            "community": {
+              "name": "${12}"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

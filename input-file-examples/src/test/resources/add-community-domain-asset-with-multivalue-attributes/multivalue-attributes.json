@@ -1,0 +1,44 @@
+[
+  {
+    "resourceType": "Community",
+    "identifier": {
+      "name": "DBs Community"
+    }
+  },
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Physical Data Dictionary"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "EXT_SYSTEM",
+      "externalEntityId": "EXT_TABLE"
+    },
+    "name": "DB_TABLE",
+    "domain": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Table"
+    },
+    "attributes": {
+      "indexes": [
+        {
+          "values": [ "surname", "name" ]
+        }
+      ]
+    }
+  }
+]

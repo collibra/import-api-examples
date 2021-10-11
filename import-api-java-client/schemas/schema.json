@@ -1,0 +1,530 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "type" : "object",
+  "additionalProperties" : false,
+  "properties" : {
+    "AssetsTemplateParameter" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "communities" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CommunityImportCommand"
+          }
+        },
+        "domains" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DomainImportCommand"
+          }
+        },
+        "assets" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AssetImportCommand"
+          }
+        },
+        "mappings" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/MappingImportCommand"
+          }
+        }
+      }
+    },
+    "JsonFileParameter" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "communities" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CommunityImportCommand"
+          }
+        },
+        "domains" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DomainImportCommand"
+          }
+        },
+        "assets" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AssetImportCommand"
+          }
+        },
+        "complexRelations" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ComplexRelationImportCommand"
+          }
+        },
+        "mappings" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/MappingImportCommand"
+          }
+        }
+      }
+    },
+    "ComplexRelationsTemplateParameter" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "legTemplates" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ComplexRelationLegTemplate"
+          }
+        },
+        "complexRelationTemplate" : {
+          "$ref" : "#/definitions/ComplexRelationImportCommand"
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "CommunityImportCommand" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "resourceType" : {
+          "type" : "string",
+          "enum" : [ "Community" ],
+          "default" : "Community"
+        },
+        "identifier" : {
+          "$ref" : "#/definitions/CommunityIdentifier"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "responsibilities" : {
+          "$ref" : "#/definitions/Responsibilities"
+        },
+        "parent" : {
+          "$ref" : "#/definitions/CommunityIdentifier"
+        }
+      },
+      "title" : "Community",
+      "required" : [ "resourceType", "identifier" ]
+    },
+    "Responsibilities" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/definitions/Owner"
+        }
+      }
+    },
+    "CommunityIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "externalSystemId" : {
+          "type" : "string"
+        },
+        "externalEntityId" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Owner" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "user" : {
+          "$ref" : "#/definitions/UserIdentifier"
+        },
+        "userGroup" : {
+          "$ref" : "#/definitions/UserGroupIdentifier"
+        }
+      }
+    },
+    "UserIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "userName" : {
+          "type" : "string"
+        }
+      }
+    },
+    "UserGroupIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DomainImportCommand" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "resourceType" : {
+          "type" : "string",
+          "enum" : [ "Domain" ],
+          "default" : "Domain"
+        },
+        "identifier" : {
+          "$ref" : "#/definitions/DomainIdentifier"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "community" : {
+          "$ref" : "#/definitions/CommunityIdentifier"
+        },
+        "type" : {
+          "$ref" : "#/definitions/DomainTypeIdentifier"
+        },
+        "responsibilities" : {
+          "$ref" : "#/definitions/Responsibilities"
+        }
+      },
+      "title" : "Domain",
+      "required" : [ "resourceType", "identifier" ]
+    },
+    "DomainIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "externalSystemId" : {
+          "type" : "string"
+        },
+        "externalEntityId" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "community" : {
+          "$ref" : "#/definitions/CommunityIdentifier"
+        }
+      }
+    },
+    "DomainTypeIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "AssetImportCommand" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "resourceType" : {
+          "type" : "string",
+          "enum" : [ "Asset" ],
+          "default" : "Asset"
+        },
+        "identifier" : {
+          "$ref" : "#/definitions/AssetIdentifier"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "displayName" : {
+          "type" : "string"
+        },
+        "domain" : {
+          "$ref" : "#/definitions/DomainIdentifier"
+        },
+        "type" : {
+          "$ref" : "#/definitions/AssetTypeIdentifier"
+        },
+        "status" : {
+          "$ref" : "#/definitions/StatusIdentifier"
+        },
+        "attributes" : {
+          "$ref" : "#/definitions/Attributes"
+        },
+        "relations" : {
+          "$ref" : "#/definitions/Relations"
+        },
+        "responsibilities" : {
+          "$ref" : "#/definitions/Responsibilities"
+        },
+        "tags" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      },
+      "title" : "Asset",
+      "required" : [ "resourceType", "identifier" ]
+    },
+    "Attributes" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/definitions/AttributeValue"
+        }
+      }
+    },
+    "Relations" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/definitions/AssetIdentifier"
+        }
+      }
+    },
+    "AssetIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "externalSystemId" : {
+          "type" : "string"
+        },
+        "externalEntityId" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "domain" : {
+          "$ref" : "#/definitions/DomainIdentifier"
+        }
+      }
+    },
+    "AssetTypeIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "StatusIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "AttributeValue" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "value" : {
+          "type" : "string"
+        },
+        "values" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "MappingImportCommand" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "resourceType" : {
+          "type" : "string",
+          "enum" : [ "Mapping" ],
+          "default" : "Mapping"
+        },
+        "identifier" : {
+          "$ref" : "#/definitions/MappingIdentifier"
+        },
+        "externalSystemId" : {
+          "type" : "string"
+        },
+        "externalEntityId" : {
+          "type" : "string"
+        },
+        "dgcId" : {
+          "type" : "string"
+        },
+        "asset" : {
+          "$ref" : "#/definitions/AssetIdentifier"
+        },
+        "domain" : {
+          "$ref" : "#/definitions/DomainIdentifier"
+        },
+        "community" : {
+          "$ref" : "#/definitions/CommunityIdentifier"
+        },
+        "complexRelation" : {
+          "$ref" : "#/definitions/ComplexRelationIdentifier"
+        },
+        "extEntityUrl" : {
+          "type" : "string"
+        },
+        "lastSyncDate" : {
+          "type" : "integer"
+        },
+        "description" : {
+          "type" : "string"
+        }
+      },
+      "title" : "Mapping",
+      "required" : [ "resourceType", "identifier" ]
+    },
+    "MappingIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "externalSystemId" : {
+          "type" : "string"
+        },
+        "externalEntityId" : {
+          "type" : "string"
+        },
+        "dgcId" : {
+          "type" : "string"
+        },
+        "asset" : {
+          "$ref" : "#/definitions/AssetIdentifier"
+        },
+        "domain" : {
+          "$ref" : "#/definitions/DomainIdentifier"
+        },
+        "community" : {
+          "$ref" : "#/definitions/CommunityIdentifier"
+        },
+        "complexRelation" : {
+          "$ref" : "#/definitions/ComplexRelationIdentifier"
+        }
+      }
+    },
+    "ComplexRelationIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "externalSystemId" : {
+          "type" : "string"
+        },
+        "externalEntityId" : {
+          "type" : "string"
+        },
+        "relations" : {
+          "$ref" : "#/definitions/Relations"
+        }
+      }
+    },
+    "ComplexRelationImportCommand" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "resourceType" : {
+          "type" : "string",
+          "enum" : [ "Complex Relation" ],
+          "default" : "Complex Relation"
+        },
+        "identifier" : {
+          "$ref" : "#/definitions/ComplexRelationIdentifier"
+        },
+        "complexRelationType" : {
+          "$ref" : "#/definitions/ComplexRelationTypeIdentifier"
+        },
+        "attributes" : {
+          "$ref" : "#/definitions/Attributes"
+        },
+        "relations" : {
+          "$ref" : "#/definitions/Relations"
+        }
+      },
+      "title" : "Complex Relation",
+      "required" : [ "resourceType", "identifier" ]
+    },
+    "ComplexRelationTypeIdentifier" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ComplexRelationLegTemplate" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "communities" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CommunityImportCommand"
+          }
+        },
+        "domains" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DomainImportCommand"
+          }
+        },
+        "assets" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AssetImportCommand"
+          }
+        },
+        "mappings" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/MappingImportCommand"
+          }
+        }
+      }
+    }
+  }
+}

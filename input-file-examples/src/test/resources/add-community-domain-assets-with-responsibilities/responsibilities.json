@@ -1,0 +1,61 @@
+[
+  {
+    "resourceType": "Community",
+    "identifier": {
+      "name": "DBs Community"
+    }
+  },
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Physical Data Dictionary"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "DB_SCHEMA",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "type": {
+      "name": "Schema"
+    },
+    "responsibilities": {
+      "Business Steward": [
+        {
+          "user": {
+            "userName": "john.doe"
+          }
+        },
+        {
+          "userGroup": {
+            "id": "471f5852-1d19-4d74-a70f-989100c3c878"
+          }
+        },
+        {
+          "userGroup": {
+            "name": "Data Citizens"
+          }
+        }
+      ],
+      "00000000-0000-0000-0000-000000005032": [
+        {
+          "user": {
+            "id": "e060bb6e-df51-466f-903f-af08142c2e9a"
+          }
+        }
+      ]
+    }
+  }
+]

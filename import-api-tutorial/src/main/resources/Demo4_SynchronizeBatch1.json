@@ -1,0 +1,80 @@
+[
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "ImportDemo Domain",
+      "community": {
+        "name": "Data Governance Council"
+      }
+    },
+    "type": {
+      "name": "Glossary"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "SynchronizeDemoAsset1",
+      "domain": {
+        "name": "ImportDemo Domain",
+        "community": {
+          "name": "Data Governance Council"
+        }
+      }
+    },
+    "type": {
+      "name": "Business Term"
+    },
+    "attributes": {
+      "Definition": [
+        {
+          "value": "This is a 'Business Term' asset used for demo of Import API Synchronization"
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "SynchronizeDemoAsset2",
+      "domain": {
+        "name": "ImportDemo Domain",
+        "community": {
+          "name": "Data Governance Council"
+        }
+      }
+    },
+    "type": {
+      "name": "Business Term"
+    },
+    "attributes": {
+      "Definition": [
+        {
+          "value": "This is a 'Business Term' asset used for demo of Import API Synchronization"
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "SynchronizeDemoAsset3",
+      "domain": {
+        "name": "ImportDemo Domain",
+        "community": {
+          "name": "Data Governance Council"
+        }
+      }
+    },
+    "type": {
+      "name": "Business Term"
+    },
+    "attributes": {
+      "Definition": [
+        {
+          "value": "This is a 'Business Term' asset used for demo of Import API Synchronization"
+        }
+      ]
+    }
+  }
+]

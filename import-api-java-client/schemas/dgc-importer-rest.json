@@ -1,0 +1,2283 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Collibra Import API",
+    "description" : "The Import API is an efficient way to load large volumes of data into the Collibra Data Governance Center. The API can automatically differentiate between creating and updating data.",
+    "version" : "2.0"
+  },
+  "servers" : [ {
+    "url" : "/rest/2.0",
+    "variables" : { }
+  } ],
+  "tags" : [ {
+    "name" : "Import",
+    "description" : "Large volume import operations"
+  } ],
+  "paths" : {
+    "/import/excel-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts import from the Excel file in job (asynchronously).",
+        "description" : "Starts import from the Excel file in job (asynchronously).\n\n<br/><p>Request can either accept <code>id</code> of the uploaded file that contains Excel input which should be used for import - or the file itself.</p>",
+        "operationId" : "importExcelInJob",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "template" ],
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "import_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "sheetName" : {
+                    "type" : "string",
+                    "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the import.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the import."
+                  },
+                  "sheetIndex" : {
+                    "type" : "integer",
+                    "description" : "The index of the Excel sheet.\n\n<br/><p>If the index is <code>null</code> and <code>sheetName</code> is <code>null</code>, the first sheet of the workbook will be used for the import.<br/><p>If the index is <code>null</code> and <code>sheetName</code> is not <code>null</code>, the sheet with the name specified by value of <code>sheetName</code> will be used for the import.",
+                    "format" : "int32"
+                  },
+                  "headerRow" : {
+                    "type" : "boolean",
+                    "description" : "Whether the first row of the imported Excel sheet is the header. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "template" : {
+                    "type" : "string",
+                    "description" : "The template that should be used for parsing and importing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Import job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/json-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts import from the JSON file in job (asynchronously).",
+        "description" : "Starts import from the JSON file in job (asynchronously).\n\n<br/><p>Request can either accept <code>id</code> of the uploaded file that contains JSON input which should be used for import - or the file itself.</p>",
+        "operationId" : "importJsonInJob",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "import_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Import job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/csv-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts import from the CSV file in job (asynchronously).",
+        "description" : "Starts import from the CSV file in job (asynchronously).\n\n<br/><p>Request can either accept <code>id</code> of the uploaded file that contains CSV input which should be used for import - or the file itself.</p>",
+        "operationId" : "importCsvInJob",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "escape", "quote", "separator", "template" ],
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "import_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "separator" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used to separate entries. <b>The default value</b> is <code>';'</code>.",
+                    "default" : ";"
+                  },
+                  "quote" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used for quoted entries. <b>The default value</b>  is <code>'\"'</code>.",
+                    "default" : "\""
+                  },
+                  "escape" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used to escape separator or quote character. <b>The default value</b> is <code>'\\\\'</code>.",
+                    "default" : "\\"
+                  },
+                  "strictQuotes" : {
+                    "type" : "boolean",
+                    "description" : "Whether the characters outside quotes should be ignored. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "ignoreLeadingWhitespace" : {
+                    "type" : "boolean",
+                    "description" : "Whether whitespace characters before quotes should be ignored. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "headerRow" : {
+                    "type" : "boolean",
+                    "description" : "Whether the first row of the imported CSV file is the header. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "template" : {
+                    "type" : "string",
+                    "description" : "The template that should be used for parsing and importing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Import job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize" : {
+      "get" : {
+        "tags" : [ "Import" ],
+        "summary" : "Returns synchronization information matching the given search criteria.",
+        "description" : "Returns synchronization information matching the given search criteria.<p>Only parameters that are specified in this request and have not <code>null</code> values are used for filtering. All other parameters are ignored.</p><p>The returned synchronization information satisfies all constraints that are specified in this search criteria. By default a result containing 1000 synchronization infos is returned.</p>",
+        "operationId" : "findSynchronizationInfos",
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "The first result to retrieve. If not set (offset = <code>0</code>), results will be retrieved starting from row <code>0</code>.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "The maximum number of results to retrieve. If not set (limit = <code>0</code>), the default limit will be used.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The paged response with found synchronization information.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PagedResponseSynchronizationInfo"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}" : {
+      "delete" : {
+        "tags" : [ "Import" ],
+        "summary" : "Removes all information about synchronization process corresponding to provided synchronization id.",
+        "description" : "Removes all information about synchronization process corresponding to provided synchronization <code>id</code>.<p>This operation stops tracking of synchronization identified by provided synchronization <code>id</code>. The next synchronization process specified with this <code>id</code> will not be able to detect resources that should be removed.</p>",
+        "operationId" : "removeSynchronization",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id of the operation.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Synchronization successfully untracked."
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/evict" : {
+      "delete" : {
+        "tags" : [ "Import" ],
+        "summary" : "Removes all cache entries corresponding to provided synchronization id.",
+        "description" : "Removes all cache entries corresponding to provided synchronization <code>id</code>.<p>This operation does not stop tracking of synchronization identified by provided synchronization <code>id</code>. The next synchronization process specified with this <code>id</code> will still be able to detect resources that should be removed.</p><p>Note though that all commands will be considered for synchronization, even though some resources did not change between two consecutive synchronization processes.</p>",
+        "operationId" : "evictSynchronizationCache",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id of the operation.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Synchronization cache entries successfully removed."
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/exists/{synchronizationId}" : {
+      "get" : {
+        "tags" : [ "Import" ],
+        "summary" : "Checks whether given synchronization id already exists.",
+        "description" : "Checks whether given synchronization <code>id</code> already exists.",
+        "operationId" : "exists",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id of the operation.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns <code>true</code> if synchronization <code>id</code> already exists, <code>false</code> otherwise.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/batch/csv-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts batch synchronization from the CSV file in job (asynchronously).",
+        "description" : "Starts batch synchronization from the CSV file in job (asynchronously).<p>Request can either accept <code>id</code> of the uploaded file that contains CSV input which should be used for import or the file itself. The input file is treated as a part (batch) of synchronization process. After last batch, finalization (cleanup) process should be called.</p>",
+        "operationId" : "synchronizeBatchCsvInJob",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id used to distinguish different synchronizations.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "escape", "quote", "separator", "template" ],
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "synchronization_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "separator" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used to separate entries. <b>The default value</b> is <code>';'</code>.",
+                    "default" : ";"
+                  },
+                  "quote" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used for quoted entries. <b>The default value</b>  is <code>'\"'</code>.",
+                    "default" : "\""
+                  },
+                  "escape" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used to escape separator or quote character. <b>The default value</b> is <code>'\\\\'</code>.",
+                    "default" : "\\"
+                  },
+                  "strictQuotes" : {
+                    "type" : "boolean",
+                    "description" : "Whether the characters outside quotes should be ignored. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "ignoreLeadingWhitespace" : {
+                    "type" : "boolean",
+                    "description" : "Whether whitespace characters before quotes should be ignored. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "headerRow" : {
+                    "type" : "boolean",
+                    "description" : "Whether the first row of the synchronized CSV file is the header. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "template" : {
+                    "type" : "string",
+                    "description" : "The template that should be used for parsing and synchronizing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Synchronization batch job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/batch/excel-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts batch synchronization from the Excel file in job (asynchronously).",
+        "description" : "Starts batch synchronization from the Excel file in job (asynchronously).<p>Request can either accept <code>id</code> of the uploaded file that contains Excel input which should be used for import or the file itself. The input file is treated as a part (batch) of synchronization process. After last batch, finalization (cleanup) process should be called.</p>",
+        "operationId" : "synchronizeBatchExcelInJob",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id used to distinguish different synchronizations.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "template" ],
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "synchronization_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "sheetName" : {
+                    "type" : "string",
+                    "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the synchronization."
+                  },
+                  "sheetIndex" : {
+                    "type" : "integer",
+                    "description" : "The index of the Excel sheet.\n\n<br/><p>If the index is <code>null</code> and <code>sheetName</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the index is <code>null</code> and <code>sheetName</code> is not <code>null</code>, the sheet with the name specified by value of <code>sheetName</code> will be used for the synchronization.",
+                    "format" : "int32"
+                  },
+                  "headerRow" : {
+                    "type" : "boolean",
+                    "description" : "Whether the first row of the synchronized Excel file is the header. <b>The default value</b> is <code>false</code>."
+                  },
+                  "template" : {
+                    "type" : "string",
+                    "description" : "The template that should be used for parsing and synchronizing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Synchronization batch job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/batch/json-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts batch synchronization from the JSON file in job (asynchronously).",
+        "description" : "Starts batch synchronization from the JSON file in job (asynchronously).<p>Request can either accept <code>id</code> of the uploaded file that contains JSON input which should be used for import or the file itself. The input file is treated as a part (batch) of synchronization process. After last batch, finalization (cleanup) process should be called.</p>",
+        "operationId" : "synchronizeBatchJsonInJob",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id used to distinguish different synchronizations.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "synchronization_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Synchronization batch job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/csv-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts full synchronization from the CSV file in job (asynchronously).",
+        "description" : "Starts full synchronization from the CSV file in job (asynchronously).<p>Request can either accept <code>id</code> of the uploaded file that contains CSV input which should be used for import or the file itself. The input file is treated as a full input of synchronization process.</p>",
+        "operationId" : "synchronizeCsvInJob",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id used to distinguish different synchronizations.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "escape", "quote", "separator", "template" ],
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "synchronization_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "separator" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used to separate entries. <b>The default value</b> is <code>';'</code>.",
+                    "default" : ";"
+                  },
+                  "quote" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used for quoted entries. <b>The default value</b>  is <code>'\"'</code>.",
+                    "default" : "\""
+                  },
+                  "escape" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used to escape separator or quote character. <b>The default value</b> is <code>'\\\\'</code>.",
+                    "default" : "\\"
+                  },
+                  "strictQuotes" : {
+                    "type" : "boolean",
+                    "description" : "Whether the characters outside quotes should be ignored. <b>The default value</b> is <code>false</code>."
+                  },
+                  "ignoreLeadingWhitespace" : {
+                    "type" : "boolean",
+                    "description" : "Whether whitespace characters before quotes should be ignored. <b>The default value</b> is <code>false</code>."
+                  },
+                  "headerRow" : {
+                    "type" : "boolean",
+                    "description" : "Whether the first row of the synchronized CSV file is the header. <b>The default value</b> is <code>false</code>."
+                  },
+                  "template" : {
+                    "type" : "string",
+                    "description" : "The template that should be used for parsing and synchronizing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Synchronization job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/excel-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts full synchronization from the Excel file in job (asynchronously).",
+        "description" : "Starts full synchronization from the Excel file in job (asynchronously).<p>Request can either accept <code>id</code> of the uploaded file that contains Excel input which should be used for import or the file itself. The input file is treated as a full input of synchronization process.</p>",
+        "operationId" : "synchronizeExcelInJob",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id used to distinguish different synchronizations.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "template" ],
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "synchronization_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "sheetName" : {
+                    "type" : "string",
+                    "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the synchronization."
+                  },
+                  "sheetIndex" : {
+                    "type" : "integer",
+                    "description" : "The index of the Excel sheet.\n\n<br/><p>If the index is <code>null</code> and <code>sheetName</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the index is <code>null</code> and <code>sheetName</code> is not <code>null</code>, the sheet with the name specified by value of <code>sheetName</code> will be used for the synchronization.",
+                    "format" : "int32"
+                  },
+                  "headerRow" : {
+                    "type" : "boolean",
+                    "description" : "Whether the first row of the synchronized Excel file is the header. <b>The default value</b> is <code>false</code>."
+                  },
+                  "template" : {
+                    "type" : "string",
+                    "description" : "The template that should be used for parsing and synchronizing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Synchronization job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/json-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts full synchronization from the JSON file in job (asynchronously).",
+        "description" : "Starts full synchronization from the JSON file in job (asynchronously).<p>Request can either accept <code>id</code> of the uploaded file that contains JSON input which should be used for import or the file itself. The input file is treated as a full input of synchronization process.</p>",
+        "operationId" : "synchronizeJsonInJob",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id used to distinguish different synchronizations.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "synchronization_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Synchronization job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/finalize/job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts synchronization finalization in job (asynchronously).",
+        "description" : "Starts synchronization finalization in job (asynchronously).",
+        "operationId" : "synchronizeFinalizeInJob",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization ID used to distinguish different synchronizations.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "format" : "int32",
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "finalizationStrategy" : {
+                    "type" : "string",
+                    "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove or change the status of resources that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES` or `CHANGE_STATUS`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `finalizationParameters`.",
+                    "default" : "REMOVE_RESOURCES"
+                  },
+                  "finalizationParameters" : {
+                    "required" : [ "STATUS_ID" ],
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "required" : [ "STATUS_ID" ],
+                      "type" : "string",
+                      "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.",
+                      "example" : "{ \"STATUS_ID\": \"00000000-0000-0000-0000-000000005066\" };type=application/json"
+                    },
+                    "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.",
+                    "example" : "{ \"STATUS_ID\": \"00000000-0000-0000-0000-000000005066\" };type=application/json"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Synchronization finalization job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Job" : {
+        "required" : [ "id", "resourceType" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The id of the represented object (entity).",
+            "format" : "uuid"
+          },
+          "createdBy" : {
+            "type" : "string",
+            "description" : "The id of the user that created this resource.",
+            "format" : "uuid",
+            "example" : "4d250cc5-e583-4640-9874-b93d82c7a6cb"
+          },
+          "createdOn" : {
+            "type" : "integer",
+            "description" : "The timestamp (in UTC time standard) of the creation of this resource.",
+            "format" : "int64",
+            "example" : 1475503010320
+          },
+          "lastModifiedBy" : {
+            "type" : "string",
+            "description" : "The id of the user who modified this resource the last time.",
+            "format" : "uuid",
+            "example" : "a073ff90-e7bc-4b35-ba90-c4d475f642fe"
+          },
+          "lastModifiedOn" : {
+            "type" : "integer",
+            "description" : "The timestamp (in UTC time standard) of the last modification of this resource.",
+            "format" : "int64",
+            "example" : 1476703764163
+          },
+          "system" : {
+            "type" : "boolean",
+            "description" : "Whether this is a system resource or not."
+          },
+          "resourceType" : {
+            "type" : "string",
+            "description" : "The type of this resource, i.e. [Community, Asset, Domain, Attribute, Relation, WorkflowInstance].",
+            "enum" : [ "View", "Asset", "Community", "Domain", "AssetType", "DomainType", "Status", "User", "ClassificationMatch", "UserGroup", "Attribute", "StringAttribute", "ScriptAttribute", "BooleanAttribute", "DateAttribute", "NumericAttribute", "SingleValueListAttribute", "MultiValueListAttribute", "Comment", "Attachment", "Responsibility", "Workflow", "Job", "Relation", "RelationType", "ComplexRelation", "ComplexRelationType", "ArticulationRule", "Assignment", "Scope", "RelationTrace", "ValidationRule", "DataQualityRule", "DataQualityMetric", "Address", "InstantMessagingAccount", "Email", "PhoneNumber", "Website", "Activity", "FormProperty", "WorkflowTask", "ActivityChange", "WorkflowInstance", "Role", "AttributeType", "BooleanAttributeType", "DateAttributeType", "DateTimeAttributeType", "MultiValueListAttributeType", "NumericAttributeType", "ScriptAttributeType", "SingleValueListAttributeType", "StringAttributeType", "ViewSharingRule", "ViewAssignmentRule", "JdbcDriverFile", "JdbcDriver", "JdbcIngestionProperties", "CsvIngestionProperties", "ExcelIngestionProperties", "ConnectionStringParameter", "AssignedCharacteristicType", "Notification", "Tag", "ComplexRelationLegType", "ComplexRelationAttributeType", "ComplexRelationLeg", "BaseDataType", "AdvancedDataType", "DiagramPicture", "DiagramPictureSharingRule", "DiagramPictureAssignmentRule", "Rating", "Classification", "PhysicalDataConnector", "Context" ]
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the resource.",
+            "example" : "Test name"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of the job.",
+            "example" : "IMPORT"
+          },
+          "userId" : {
+            "type" : "string",
+            "description" : "The ID of the user that initiated this job.",
+            "format" : "uuid"
+          },
+          "visibility" : {
+            "type" : "integer",
+            "description" : "The visibility of the job.",
+            "format" : "int32"
+          },
+          "progressPercentage" : {
+            "type" : "number",
+            "description" : "The progress percentage of the job.",
+            "format" : "double",
+            "example" : 50.0
+          },
+          "cancelable" : {
+            "type" : "boolean",
+            "description" : "Whether this job is cancelable or not. If set to false it will not be possible to cancel the job once submitted."
+          },
+          "startDate" : {
+            "type" : "integer",
+            "description" : "The start date of the job.",
+            "format" : "int64",
+            "example" : 1488016800
+          },
+          "endDate" : {
+            "type" : "integer",
+            "description" : "The end date of the job.",
+            "format" : "int64",
+            "example" : 1488021800
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "The state of the job.",
+            "example" : "COMPLETED",
+            "enum" : [ "WAITING", "RUNNING", "CANCELING", "COMPLETED", "CANCELED", "ERROR" ]
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "The message of the job.",
+            "example" : "Import finished in 12s."
+          }
+        },
+        "description" : "Represents a job. Job is a single atomic task that is to be performed asynchronously"
+      },
+      "ImportExcelInJobRequest" : {
+        "required" : [ "template" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "sheetName" : {
+            "type" : "string",
+            "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the import.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the import."
+          },
+          "sheetIndex" : {
+            "type" : "integer",
+            "description" : "The index of the Excel sheet.\n\n<br/><p>If the index is <code>null</code> and <code>sheetName</code> is <code>null</code>, the first sheet of the workbook will be used for the import.<br/><p>If the index is <code>null</code> and <code>sheetName</code> is not <code>null</code>, the sheet with the name specified by value of <code>sheetName</code> will be used for the import.",
+            "format" : "int32"
+          },
+          "headerRow" : {
+            "type" : "boolean",
+            "description" : "Whether the first row of the imported Excel sheet is the header. <b>The default value</b> is <code>false</code>."
+          },
+          "template" : {
+            "type" : "string",
+            "description" : "The template that should be used for parsing and importing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          }
+        },
+        "description" : "The request defining import call properties from an Excel file."
+      },
+      "AssetIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "domain" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          }
+        }
+      },
+      "AssetImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/AssetIdentifier"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "domain" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/AssetTypeIdentifier"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/StatusIdentifier"
+          },
+          "attributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AttributeValue"
+              }
+            }
+          },
+          "relations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AssetIdentifier"
+              }
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AssetTypeIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AttributeValue" : {
+        "type" : "object",
+        "properties" : {
+          "value" : {
+            "type" : "string"
+          },
+          "values" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "CommunityIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommunityImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "language" : {
+            "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ComplexRelationIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "relations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AssetIdentifier"
+              }
+            }
+          }
+        }
+      },
+      "ComplexRelationImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
+          },
+          "complexRelationType" : {
+            "$ref" : "#/components/schemas/ComplexRelationTypeIdentifier"
+          },
+          "attributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AttributeValue"
+              }
+            }
+          },
+          "relations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AssetIdentifier"
+              }
+            }
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ComplexRelationTypeIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DomainIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "community" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          }
+        }
+      },
+      "DomainImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "community" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/DomainTypeIdentifier"
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DomainTypeIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ExternalIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ImportJsonInJobRequest" : {
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          }
+        },
+        "description" : "The request defining import call properties from a JSON file.",
+        "anyOf" : [ {
+          "$ref" : "#/components/schemas/CommunityImportCommand"
+        }, {
+          "$ref" : "#/components/schemas/DomainImportCommand"
+        }, {
+          "$ref" : "#/components/schemas/AssetImportCommand"
+        }, {
+          "$ref" : "#/components/schemas/MappingImportCommand"
+        }, {
+          "$ref" : "#/components/schemas/ComplexRelationImportCommand"
+        } ]
+      },
+      "MappingIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "dgcId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "asset" : {
+            "$ref" : "#/components/schemas/AssetIdentifier"
+          },
+          "domain" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          },
+          "community" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "complexRelation" : {
+            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
+          }
+        }
+      },
+      "MappingImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/MappingIdentifier"
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "dgcId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "asset" : {
+            "$ref" : "#/components/schemas/AssetIdentifier"
+          },
+          "domain" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          },
+          "community" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "complexRelation" : {
+            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
+          },
+          "extEntityUrl" : {
+            "type" : "string"
+          },
+          "lastSyncDate" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "syncAction" : {
+            "type" : "string",
+            "enum" : [ "ADD", "UPDATE", "REMOVE" ]
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "StatusIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ImportCsvInJobRequest" : {
+        "required" : [ "escape", "quote", "separator", "template" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "separator" : {
+            "type" : "string",
+            "description" : "The delimiter character used to separate entries. <b>The default value</b> is <code>';'</code>."
+          },
+          "quote" : {
+            "type" : "string",
+            "description" : "The delimiter character used for quoted entries. <b>The default value</b>  is <code>'\"'</code>."
+          },
+          "escape" : {
+            "type" : "string",
+            "description" : "The delimiter character used to escape separator or quote character. <b>The default value</b> is <code>'\\\\'</code>."
+          },
+          "strictQuotes" : {
+            "type" : "boolean",
+            "description" : "Whether the characters outside quotes should be ignored. <b>The default value</b> is <code>false</code>."
+          },
+          "ignoreLeadingWhitespace" : {
+            "type" : "boolean",
+            "description" : "Whether whitespace characters before quotes should be ignored. <b>The default value</b> is <code>false</code>."
+          },
+          "headerRow" : {
+            "type" : "boolean",
+            "description" : "Whether the first row of the imported CSV file is the header. <b>The default value</b> is <code>false</code>."
+          },
+          "template" : {
+            "type" : "string",
+            "description" : "The template that should be used for parsing and importing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          }
+        },
+        "description" : "The request defining import call properties from a CSV file."
+      },
+      "PagedResponseSynchronizationInfo" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "The total number of results.",
+            "format" : "int64",
+            "example" : 1000
+          },
+          "offset" : {
+            "type" : "integer",
+            "description" : "The offset for the results.",
+            "format" : "int64",
+            "example" : 10
+          },
+          "limit" : {
+            "type" : "integer",
+            "description" : "The maximum number of results to be returned.",
+            "format" : "int64",
+            "example" : 100
+          },
+          "results" : {
+            "type" : "array",
+            "description" : "The list of results.",
+            "items" : {
+              "$ref" : "#/components/schemas/SynchronizationInfo"
+            }
+          }
+        },
+        "description" : "Response containing the paged information."
+      },
+      "SynchronizationInfo" : {
+        "type" : "object",
+        "properties" : {
+          "synchronizationId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of the synchronization.",
+            "example" : "ABCDEF123456789"
+          }
+        },
+        "description" : "Represents a synchronization information."
+      },
+      "FindSynchronizationRequest" : {
+        "type" : "object",
+        "properties" : {
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "description" : "The search criteria for synchronization information.\nOnly parameters that are specified in this request and have not <code>null</code> values are used for filtering.\nAll other parameters are ignored.\nThe returned synchronization information satisfy all constraints that are specified in this search criteria.\nBy default a result containing 1000 synchronization infos is returned."
+      },
+      "SynchronizationBatchCsvInJobRequest" : {
+        "required" : [ "escape", "quote", "separator", "synchronizationId", "template" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "synchronizationId" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "separator" : {
+            "type" : "string",
+            "description" : "The delimiter character used to separate entries. <b>The default value</b> is <code>';'</code>."
+          },
+          "quote" : {
+            "type" : "string",
+            "description" : "The delimiter character used for quoted entries. <b>The default value</b>  is <code>'\"'</code>."
+          },
+          "escape" : {
+            "type" : "string",
+            "description" : "The delimiter character used to escape separator or quote character. <b>The default value</b> is <code>'\\\\'</code>."
+          },
+          "strictQuotes" : {
+            "type" : "boolean",
+            "description" : "Whether the characters outside quotes should be ignored. <b>The default value</b> is <code>false</code>."
+          },
+          "ignoreLeadingWhitespace" : {
+            "type" : "boolean",
+            "description" : "Whether whitespace characters before quotes should be ignored. <b>The default value</b> is <code>false</code>."
+          },
+          "headerRow" : {
+            "type" : "boolean",
+            "description" : "Whether the first row of the synchronized CSV file is the header. <b>The default value</b> is <code>false</code>."
+          },
+          "template" : {
+            "type" : "string",
+            "description" : "The template that should be used for parsing and synchronizing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          }
+        },
+        "description" : "The request defining batch synchronization call properties from a CSV file."
+      },
+      "SynchronizationBatchExcelInJobRequest" : {
+        "required" : [ "synchronizationId", "template" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "synchronizationId" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "sheetName" : {
+            "type" : "string",
+            "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the synchronization."
+          },
+          "sheetIndex" : {
+            "type" : "integer",
+            "description" : "The index of the Excel sheet.\n\n<br/><p>If the index is <code>null</code> and <code>sheetName</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the index is <code>null</code> and <code>sheetName</code> is not <code>null</code>, the sheet with the name specified by value of <code>sheetName</code> will be used for the synchronization.",
+            "format" : "int32"
+          },
+          "headerRow" : {
+            "type" : "boolean",
+            "description" : "Whether the first row of the synchronized Excel file is the header. <b>The default value</b> is <code>false</code>."
+          },
+          "template" : {
+            "type" : "string",
+            "description" : "The template that should be used for parsing and synchronizing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          }
+        },
+        "description" : "The request defining batch synchronization call properties from a Excel file."
+      },
+      "SynchronizationBatchJsonInJobRequest" : {
+        "required" : [ "synchronizationId" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "synchronizationId" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "relationsAction" : {
+            "pattern" : "ADD_OR_IGNORE|REPLACE",
+            "type" : "string"
+          }
+        },
+        "description" : "The request defining synchronization call properties from a JSON file."
+      },
+      "SynchronizationCsvInJobRequest" : {
+        "required" : [ "escape", "quote", "separator", "synchronizationId", "template" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "synchronizationId" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "separator" : {
+            "type" : "string",
+            "description" : "The delimiter character used to separate entries. <b>The default value</b> is <code>';'</code>."
+          },
+          "quote" : {
+            "type" : "string",
+            "description" : "The delimiter character used for quoted entries. <b>The default value</b>  is <code>'\"'</code>."
+          },
+          "escape" : {
+            "type" : "string",
+            "description" : "The delimiter character used to escape separator or quote character. <b>The default value</b> is <code>'\\\\'</code>."
+          },
+          "strictQuotes" : {
+            "type" : "boolean",
+            "description" : "Whether the characters outside quotes should be ignored. <b>The default value</b> is <code>false</code>."
+          },
+          "ignoreLeadingWhitespace" : {
+            "type" : "boolean",
+            "description" : "Whether whitespace characters before quotes should be ignored. <b>The default value</b> is <code>false</code>."
+          },
+          "headerRow" : {
+            "type" : "boolean",
+            "description" : "Whether the first row of the synchronized CSV file is the header. <b>The default value</b> is <code>false</code>."
+          },
+          "template" : {
+            "type" : "string",
+            "description" : "The template that should be used for parsing and synchronizing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          }
+        },
+        "description" : "The request defining synchronization call properties from a CSV file."
+      },
+      "SynchronizationExcelInJobRequest" : {
+        "required" : [ "synchronizationId", "template" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "synchronizationId" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "sheetName" : {
+            "type" : "string",
+            "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the synchronization."
+          },
+          "sheetIndex" : {
+            "type" : "integer",
+            "description" : "The index of the Excel sheet.\n\n<br/><p>If the index is <code>null</code> and <code>sheetName</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the index is <code>null</code> and <code>sheetName</code> is not <code>null</code>, the sheet with the name specified by value of <code>sheetName</code> will be used for the synchronization.",
+            "format" : "int32"
+          },
+          "headerRow" : {
+            "type" : "boolean",
+            "description" : "Whether the first row of the synchronized Excel file is the header. <b>The default value</b> is <code>false</code>."
+          },
+          "template" : {
+            "type" : "string",
+            "description" : "The template that should be used for parsing and synchronizing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          }
+        },
+        "description" : "The request defining synchronization call properties from a Excel file."
+      },
+      "SynchronizationJsonInJobRequest" : {
+        "required" : [ "synchronizationId" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "synchronizationId" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "finalizationStrategy" : {
+            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS",
+            "type" : "string"
+          },
+          "finalizationParameters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "relationsAction" : {
+            "pattern" : "ADD_OR_IGNORE|REPLACE",
+            "type" : "string"
+          }
+        },
+        "description" : "The request defining synchronization call properties from a JSON file."
+      },
+      "SynchronizationFinalizationRequest" : {
+        "required" : [ "synchronizationId" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "format" : "int64",
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "synchronizationId" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "finalizationStrategy" : {
+            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS",
+            "type" : "string",
+            "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove or change the status of resources that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES` or `CHANGE_STATUS`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `finalizationParameters`."
+          },
+          "finalizationParameters" : {
+            "required" : [ "STATUS_ID" ],
+            "type" : "object",
+            "additionalProperties" : {
+              "required" : [ "STATUS_ID" ],
+              "type" : "string",
+              "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.",
+              "example" : "{ \"STATUS_ID\": \"00000000-0000-0000-0000-000000005066\" };type=application/json"
+            },
+            "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.",
+            "example" : "{ \"STATUS_ID\": \"00000000-0000-0000-0000-000000005066\" };type=application/json"
+          }
+        },
+        "description" : "The request defining synchronization finalization call properties."
+      }
+    },
+    "securitySchemes" : {
+      "basicAuth" : {
+        "type" : "http",
+        "scheme" : "basic"
+      }
+    }
+  }
+}

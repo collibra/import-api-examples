@@ -1,0 +1,18 @@
+[
+  {
+    "resourceType": "Mapping",
+    "identifier": {
+      "externalSystemId": "${1}",
+      "externalEntityId": "${2}"
+    },
+    "asset": {
+      "name": "${3}",
+      "domain": {
+        "name": "${4}",
+        "community": {
+          "name": "${5}"
+        }
+      }
+    }
+  }
+]

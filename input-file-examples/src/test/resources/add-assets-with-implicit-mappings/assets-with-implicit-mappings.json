@@ -1,0 +1,162 @@
+[
+  {
+    "resourceType": "Community",
+    "identifier": {
+      "name": "DBs Community"
+    }
+  },
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Physical Data Dictionary"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "EXT_SYSTEM",
+      "externalEntityId": "EXT_SCHEMA_1_ID"
+    },
+    "name": "SCHEMA_1",
+    "domain": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Schema"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "EXT_SYSTEM",
+      "externalEntityId": "EXT_TABLE_1_ID"
+    },
+    "name": "TABLE_1",
+    "domain": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Table"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007043:SOURCE": [
+        {
+          "externalSystemId": "EXT_SYSTEM",
+          "externalEntityId": "EXT_SCHEMA_1_ID"
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "EXT_SYSTEM",
+      "externalEntityId": "EXT_TABLE_2_ID"
+    },
+    "name": "TABLE_2",
+    "domain": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Table"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007043:SOURCE": [
+        {
+          "externalSystemId": "EXT_SYSTEM",
+          "externalEntityId": "EXT_SCHEMA_1_ID"
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "EXT_SYSTEM",
+      "externalEntityId": "EXT_TABLE_1_COLUMN_1_ID"
+    },
+    "name": "TAB_1_COLUMN_1",
+    "domain": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Column"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007042:TARGET": [
+        {
+          "externalSystemId": "EXT_SYSTEM",
+          "externalEntityId": "EXT_TABLE_1_ID"
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "EXT_SYSTEM",
+      "externalEntityId": "EXT_TABLE_1_COLUMN_2_ID"
+    },
+    "name": "TAB_1_COLUMN_2",
+    "domain": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Column"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007042:TARGET": [
+        {
+          "externalSystemId": "EXT_SYSTEM",
+          "externalEntityId": "EXT_TABLE_1_ID"
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "EXT_SYSTEM",
+      "externalEntityId": "EXT_TABLE_2_COLUMN_1_ID"
+    },
+    "name": "TAB_2_COLUMN_1",
+    "domain": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Column"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007042:TARGET": [
+        {
+          "externalSystemId": "EXT_SYSTEM",
+          "externalEntityId": "EXT_TABLE_2_ID"
+        }
+      ]
+    }
+  }
+]
