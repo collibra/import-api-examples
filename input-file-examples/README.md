@@ -2,13 +2,6 @@
 
 This module demonstrates how to ingest communities, domains, assets, relations, etc from CSV, Excel and JSON files into your Collibra environment.
 
-This module is dependent on import-api-java-client. So, please build that module before you try to build this module.
-___
-1. `$ git clone https://github.com/collibra/import-api-examples.git`
-1. Edit [**config.properties**](../import-api-java-client/src/main/resources/config.properties) in **import-api-java-client\sr\main\resources**
-1. `$ gradle clean build` to compile the code and run the unit tests in Input-File-Examples module.
-___
-
 ## Table of contents
 1. [Project Structure](#project-structure)
 1. [Project Configuration](#project-configuration)

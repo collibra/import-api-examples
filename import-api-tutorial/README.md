@@ -3,14 +3,6 @@
 This is a tutorial module that demonstrates how to use the Import and Synchronization APIs. This module has a series of
 examples that you can run independently.
 
-This module is dependent on the import-api-java-client module, which you must build before you build this module.
-___
-
-1. `$ git clone https://github.com/collibra/import-api-examples.git`
-1. Edit [**config.properties**](../import-api-java-client/src/main/resources/config.properties) in **
-   import-api-java-client\sr\main\resources**
-1. `$ gradle clean build` to compile the code and run the examples in the import-api-tutorial module.
-
 ___
 
 ## Table of contents

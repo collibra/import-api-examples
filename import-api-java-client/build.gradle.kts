@@ -1,4 +1,10 @@
-import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+apply(plugin = "java")
+apply(plugin = "org.openapi.generator")
+apply(plugin = "jsonschema2pojo")
+
+repositories {
+    mavenCentral()
+}
 
 val oasGeneratorName: String by project
 val oasLibrary: String by project
@@ -12,23 +18,11 @@ buildscript {
 
     val jsonschema2pojoVersion: String by project
     val openApiGeneratorVersion: String by project
+
     dependencies {
         classpath("org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:$jsonschema2pojoVersion")
         classpath("org.openapitools:openapi-generator-gradle-plugin:$openApiGeneratorVersion")
     }
-}
-
-apply(plugin = "java")
-apply(plugin = "org.openapi.generator")
-apply(plugin = "jsonschema2pojo")
-
-
-configure<JavaPluginExtension> {
-    1.8
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {

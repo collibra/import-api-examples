@@ -3,8 +3,8 @@
 The Collibra Import API enhances your experience with data by giving you the tools to integrate your systems with the Collibra Platform.
 ___
 1. `$ git clone https://github.com/collibra/import-api-examples.git`
-1. Edit [config.properties](import-api-java-client/src/main/resources/config.properties) in **import-api-java-client\src\main\resources**
-1. `$ gradle clean build` to compile the code in all the 3 modules and to run the unit tests.
+1. Fill in required properties (collibra.url, collibra.username, collibra.password) in [config.properties](import-api-java-client/src/main/resources/config.properties) in **import-api-java-client\src\main\resources**
+1. `$ ./gradlew build` to compile the code in all the 3 modules and to run the unit tests.
 ___
 
 This repository has the following sub-modules:

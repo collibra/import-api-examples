@@ -3,13 +3,6 @@
 The repository contains plugins for generating API Clients for the Import and Core APIs. It also helps to generate POJO classes for Template schemas, used by the Import API 
 to import CSV and Excel files.
 
-___
-1. `$ git clone https://github.com/collibra/import-api-examples.git`
-1. Edit [config.properties](src/main/resources/config.properties) in **src/main/resources**
-1. `$ gradle clean assemble` to compile the code and generate the required Import API clients and POJO classes.
-1. `$ gradle clean build` to compile the code and run the unit tests in Import-api-java-client.
-___
-
 ## Table of contents
 
 1. [Project structure](#project-structure)

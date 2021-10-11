@@ -1,14 +1,14 @@
-val feignVersion: String by project
-val assertJVersion: String by project
-val log4jApiVersion: String by project
-
 plugins {
-    java
+    `java-library`
 }
 
 repositories {
     mavenCentral()
 }
+
+val feignVersion: String by project
+val assertJVersion: String by project
+val log4jApiVersion: String by project
 
 dependencies {
     implementation(project(":import-api-java-client"))

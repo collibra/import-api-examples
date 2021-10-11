@@ -1,3 +1,11 @@
+plugins {
+    `java-library`
+}
+
+repositories {
+    mavenCentral()
+}
+
 val feignVersion: String by project
 val feignFormVersion: String by project
 val log4jApiVersion: String by project
@@ -6,15 +14,6 @@ val lombokVersion: String by project
 val junitVersion: String by project
 val mockitoJunitVersion: String by project
 val assertJVersion: String by project
-
-
-plugins {
-    id("java-library")
-}
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     implementation(project(":import-api-java-client"))
