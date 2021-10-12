@@ -1,3 +1,7 @@
-.idea
-.gradle
-build
+#Global file exclusions from GIT
+.DS_Store
+
+#Global folder exclusions from GIT
+.gradle/
+.idea/
+build/

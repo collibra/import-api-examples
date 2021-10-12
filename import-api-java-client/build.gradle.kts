@@ -1,132 +1,114 @@
-apply(plugin = "java")
-apply(plugin = "org.openapi.generator")
-apply(plugin = "jsonschema2pojo")
-
-repositories {
-    mavenCentral()
-}
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 val oasGeneratorName: String by project
 val oasLibrary: String by project
 val oasGenerateModelTests: String by project
 val oasGenerateApiTests: String by project
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
+plugins {
+    id("import-api-examples.java-conventions")
 
-    val jsonschema2pojoVersion: String by project
-    val openApiGeneratorVersion: String by project
-
-    dependencies {
-        classpath("org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:$jsonschema2pojoVersion")
-        classpath("org.openapitools:openapi-generator-gradle-plugin:$openApiGeneratorVersion")
-    }
+    id("org.openapi.generator") version "4.3.1"
+    id("org.jsonschema2dataclass") version "3.0.0"
 }
 
 dependencies {
-    val feignVersion: String by project
-    val feignFormVersion: String by project
-    val log4jApiVersion: String by project
     val openCsvVersion: String by project
     val lombokVersion: String by project
     val junitVersion: String by project
     val mockitoJunitVersion: String by project
     val assertJVersion: String by project
-    val jsonschema2pojoVersion: String by project
-    val openApiGeneratorVersion: String by project
-    val openApiJacksonDatabindNullableVersion: String by project
 
-    "implementation"("io.github.openfeign:feign-core:$feignVersion")
-    "implementation"("io.github.openfeign:feign-jackson:$feignVersion")
-    "implementation"("io.github.openfeign:feign-slf4j:$feignVersion")
-    "implementation"("io.github.openfeign.form:feign-form:$feignFormVersion")
-    "implementation"("org.apache.logging.log4j:log4j-api:$log4jApiVersion")
-    "implementation"("org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:$jsonschema2pojoVersion")
-    "implementation"("org.openapitools:openapi-generator-gradle-plugin:$openApiGeneratorVersion")
-    "implementation"("org.openapitools:jackson-databind-nullable:$openApiJacksonDatabindNullableVersion")
-    "implementation"("com.opencsv:opencsv:$openCsvVersion")
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
 
-    "compileOnly"("org.projectlombok:lombok:$lombokVersion")
-    "annotationProcessor"("org.projectlombok:lombok:$lombokVersion")
+    implementation("com.opencsv:opencsv:$openCsvVersion")
 
-    "testImplementation"("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    "testImplementation"("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    "testImplementation"("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-    "testImplementation"("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
-    "testImplementation"("org.assertj:assertj-core:$assertJVersion")
+    testImplementation("org.assertj:assertj-core:$assertJVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
+
+    // Workaround for https://github.com/OpenAPITools/openapi-generator/issues/9602#issuecomment-859528250
+    // Dependencies copied from openapi generated gradle build script
+    implementation( "com.brsanthu:migbase64:2.2")
+    implementation( "com.fasterxml.jackson.core:jackson-annotations:2.10.3")
+    implementation( "com.fasterxml.jackson.core:jackson-core:2.10.3")
+    implementation( "com.fasterxml.jackson.core:jackson-databind:2.10.3")
+    implementation( "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3")
+    implementation( "com.google.code.findbugs:jsr305:3.0.2")
+    implementation( "io.github.openfeign:feign-core:11.0")
+    implementation( "io.github.openfeign:feign-jackson:11.0")
+    implementation( "io.github.openfeign:feign-slf4j:11.0")
+    implementation( "io.github.openfeign.form:feign-form:3.8.0")
+    implementation ("io.swagger:swagger-annotations:1.5.24")
+    implementation( "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.1")
+    implementation( "org.openapitools:jackson-databind-nullable:0.2.1")
 }
 
-configure<SourceSetContainer> {
-    named("main") {
+java {
+    sourceSets.main {
         java {
-            srcDir("$buildDir/generated-openapi/src/main/java")
+            srcDir(layout.buildDirectory.dir("generated-openapi/src/main/java"))
         }
-     }
- }
-
-tasks {
-    "test"(Test::class) {
-        useJUnitPlatform()
     }
 }
 
 val additionalPropertiesMap = mapOf(
-        "hideGenerationTimestamp" to "true",
-        "useApacheHttpClient"    to "true",
-        "useFeign10"    to "true",
-        "java8"         to "true"
+    "hideGenerationTimestamp" to "true",
+    "useApacheHttpClient" to "true",
+    "useFeign10" to "true",
+    "java8" to "true"
 )
 
-val  configOptionsMap = mapOf("dateLibrary" to "java8")
+val configOptionsMap = mapOf("dateLibrary" to "java8")
 
- tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("buildCoreRestClient"){
-     generatorName.value("$oasGeneratorName")
-     library.value("$oasLibrary")
-     generateModelTests.value("$oasGenerateModelTests".toBoolean())
-     generateApiTests.value("$oasGenerateApiTests".toBoolean())
+val buildCoreRestClient by tasks.registering(GenerateTask::class) {
+    generatorName.set(oasGeneratorName)
+    library.set(oasLibrary)
+    generateModelTests.set(oasGenerateModelTests.toBoolean())
+    generateApiTests.set(oasGenerateApiTests.toBoolean())
 
-     inputSpec.value("$projectDir/schemas/dgc-rest.json")
-     outputDir.value("$buildDir/generated-openapi")
+    inputSpec.set("$projectDir/schemas/dgc-rest.json")
+    outputDir.set("$buildDir/generated-openapi")
 
-     apiPackage.value("com.collibra.core.rest.client.api")
-     invokerPackage.value("com.collibra.core.rest.client.invoker")
-     modelPackage.value("com.collibra.core.rest.client.model")
-     configOptions.value(configOptionsMap)
-     additionalProperties.value(additionalPropertiesMap)
+    apiPackage.set("com.collibra.core.rest.client.api")
+    invokerPackage.set("com.collibra.core.rest.client.invoker")
+    modelPackage.set("com.collibra.core.rest.client.model")
+    configOptions.set(configOptionsMap)
+    additionalProperties.set(additionalPropertiesMap)
 }
 
-configure <org.openapitools.generator.gradle.plugin.extensions.OpenApiGeneratorGenerateExtension> {
-    generatorName.value("$oasGeneratorName")
-    library.value("$oasLibrary")
-    generateModelTests.value("$oasGenerateModelTests".toBoolean())
-    generateApiTests.value("$oasGenerateApiTests".toBoolean())
+openApiGenerate {
+    generatorName.set(oasGeneratorName)
+    library.set(oasLibrary)
+    generateModelTests.set(oasGenerateModelTests.toBoolean())
+    generateApiTests.set(oasGenerateApiTests.toBoolean())
 
-     inputSpec.value("$projectDir/schemas/dgc-importer-rest.json")
-     outputDir.value("$buildDir/generated-openapi")
+    inputSpec.set("$projectDir/schemas/dgc-importer-rest.json")
+    outputDir.set("$buildDir/generated-openapi")
 
-     apiPackage.value("com.collibra.importer.rest.client.api")
-     invokerPackage.value("com.collibra.importer.rest.client.invoker")
-     modelPackage.value("com.collibra.importer.rest.client.model")
-     configOptions.value(configOptionsMap)
-     additionalProperties.value(additionalPropertiesMap)
+    apiPackage.set("com.collibra.importer.rest.client.api")
+    invokerPackage.set("com.collibra.importer.rest.client.invoker")
+    modelPackage.set("com.collibra.importer.rest.client.model")
+    configOptions.set(configOptionsMap)
+    additionalProperties.set(additionalPropertiesMap)
 }
 
-configure <org.jsonschema2pojo.gradle.JsonSchemaExtension> {
-    sourceFiles = fileTree("$projectDir/schemas").files
-    targetDirectory = file("$buildDir/generated-params")
+jsonSchema2Pojo {
+    source.setFrom(fileTree("$projectDir/schemas"))
+    targetDirectoryPrefix.set(file("$buildDir/generated-params"))
     targetPackage = "com.collibra.importer.parameters"
     generateBuilders = true
     includeDynamicBuilders = true
     initializeCollections = false
 }
 
-tasks.named<JavaCompile>("compileJava") {
-    dependsOn(project.tasks.getByName("buildCoreRestClient"), project.tasks.getByName("openApiGenerate"))
+
+tasks.compileJava {
+    dependsOn(buildCoreRestClient, tasks.openApiGenerate)
 }
 
-tasks.named<JavaCompile>("compileJava") {
-    dependsOn(project.tasks.getByName("generateJsonSchema2Pojo"))
+tasks.test {
+    outputs.upToDateWhen { project.hasProperty("IGNORE_TEST_FAILURES") }
+    ignoreFailures = project.hasProperty("IGNORE_TEST_FAILURES")
 }
-

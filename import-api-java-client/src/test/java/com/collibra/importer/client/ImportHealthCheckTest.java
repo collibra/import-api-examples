@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-
 class ImportHealthCheckTest {
 
 	private static ImporterApi importApi;
