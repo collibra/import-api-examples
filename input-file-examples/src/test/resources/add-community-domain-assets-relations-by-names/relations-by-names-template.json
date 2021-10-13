@@ -1,0 +1,60 @@
+[
+  {
+    "resourceType": "Community",
+    "identifier": {
+      "name": "${2}"
+    }
+  },
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "${4}",
+      "community": {
+        "name": "${2}"
+      }
+    },
+    "type": {
+      "name": "${3}"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "${5}",
+      "domain": {
+        "name": "${4}",
+        "community": {
+          "name": "${2}"
+        }
+      }
+    },
+    "type": {
+      "name": "${1}"
+    },
+    "relations": {
+      "Schema/contains/is part of/Table:SOURCE": [
+        {
+          "name": "${8}",
+          "domain": {
+            "name": "${7}",
+            "community": {
+              "name": "${6}"
+            }
+          }
+        }
+      ],
+      "Column/is part of/contains/Table:TARGET": [
+        {
+          "name": "${11}",
+          "domain": {
+            "name": "${10}",
+            "community": {
+              "name": "${9}"
+            }
+          }
+        }
+      ]
+    }
+
+  }
+]

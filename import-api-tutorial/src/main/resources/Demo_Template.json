@@ -1,0 +1,60 @@
+[
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "${6}",
+      "community": {
+        "name": "${5}"
+      }
+    },
+    "type": {
+      "name": "Glossary"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "${1}",
+      "domain": {
+        "name": "${6}",
+        "community": {
+          "name": "${5}"
+        }
+      }
+    },
+    "type": {
+      "name": "${3}"
+    },
+    "attributes": {
+      "Definition": [
+        {
+          "value": "${4}"
+        }
+      ]
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007030:SOURCE": [
+        {
+          "name": "${12}",
+          "domain": {
+            "name": "${11}",
+            "community": {
+              "name": "${10}"
+            }
+          }
+        }
+      ],
+      "00000000-0000-0000-0000-000000007030:TARGET": [
+        {
+          "name": "${9}",
+          "domain": {
+            "name": "${8}",
+            "community": {
+              "name": "${7}"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

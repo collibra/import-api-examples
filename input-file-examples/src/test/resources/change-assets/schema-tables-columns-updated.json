@@ -1,0 +1,163 @@
+[
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "SCHEMA_1",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "displayName": "SCHEMA",
+    "type": {
+      "name": "Schema"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "TABLE_1",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "displayName": "T1",
+    "type": {
+      "name": "Table"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007043:SOURCE": [
+        {
+          "name": "SCHEMA_1",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "TABLE_2",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "displayName": "T2",
+    "type": {
+      "name": "Table"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007043:SOURCE": [
+        {
+          "name": "SCHEMA_1",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "TAB_1_COLUMN_1",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "type": {
+      "name": "Column"
+    },
+    "displayName": "C1",
+    "relations": {
+      "00000000-0000-0000-0000-000000007042:TARGET": [
+        {
+          "name": "TABLE_1",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "TAB_1_COLUMN_2",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "displayName": "C2",
+    "type": {
+      "name": "Column"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007042:TARGET": [
+        {
+          "name": "TABLE_1",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "TAB_2_COLUMN_1",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "displayName": "C3",
+    "type": {
+      "name": "Column"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007042:TARGET": [
+        {
+          "name": "TABLE_2",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

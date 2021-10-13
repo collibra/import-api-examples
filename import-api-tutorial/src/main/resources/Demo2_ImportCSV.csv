@@ -1,0 +1,3 @@
+Name;Status;Asset Type;Definition;Community;Domain;has acronym [Acronym] > Community;has acronym [Acronym] > Domain;has acronym [Acronym] > Name;is acronym for [Business Asset] > Community;is acronym for [Business Asset] > Domain;is acronym for [Business Asset] > Name
+IDA2;Candidate;Acronym;;Data Governance Council;ImportDemo Domain;;;;Data Governance Council;ImportDemo Domain;ImportDemoAsset2
+ImportDemoAsset2;Candidate;Business Term;This is a 'Business Term' asset used for demo of Import API;Data Governance Council;ImportDemo Domain;Data Governance Council;ImportDemo Domain;IDA2;;;;

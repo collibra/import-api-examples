@@ -1,0 +1,10 @@
+[
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "externalSystemId": "${1}",
+      "externalEntityId": "${2}"
+    },
+    "name": "${3}"
+  }
+]

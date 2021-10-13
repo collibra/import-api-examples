@@ -1,0 +1,4 @@
+Name;Asset Type;Domain Name;Domain Type;Community Name;is part of [Schema] > Name;is part of [Schema] > Domain Name;is part of [Schema] > Community Name;is part of [Table] > Name;is part of [Table] > Domain Name;is part of [Table] > Community Name
+SCHEMA_1;Schema;Physical Domain;Physical Data Dictionary;DBs Community;;;;;;
+TABLE_2;Table;Physical Domain;Physical Data Dictionary;DBs Community;SCHEMA_1;Physical Domain;DBs Community;;;;
+TAB_2_COLUMN_1;Column;Physical Domain;Physical Data Dictionary;DBs Community;;;;TABLE_2;Physical Domain;DBs Community

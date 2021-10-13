@@ -1,0 +1,91 @@
+[
+  {
+    "resourceType": "Community",
+    "identifier": {
+      "name": "DBs Community"
+    }
+  },
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "Physical Domain",
+      "community": {
+        "name": "DBs Community"
+      }
+    },
+    "type": {
+      "name": "Physical Data Dictionary"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "DB_SCHEMA",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "type": {
+      "name": "Schema"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "DB_TABLE",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "type": {
+      "name": "Table"
+    },
+    "relations": {
+      "Schema/contains/is part of/Table:SOURCE": [
+        {
+          "name": "DB_SCHEMA",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "DB_COLUMN",
+      "domain": {
+        "name": "Physical Domain",
+        "community": {
+          "name": "DBs Community"
+        }
+      }
+    },
+    "type": {
+      "name": "Column"
+    },
+    "relations": {
+      "Column/is part of/contains/Table:TARGET": [
+        {
+          "name": "DB_TABLE",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,7 @@
+External System Id;External Entity Id;Name;Asset Type;Domain Name;Domain Type;Community Name;is part of [Schema] > External System Id;is part of [Schema] > External Entity Id;is part of [Table] > External System Id;is part of [Table] > External Entity Id
+EXT_SYSTEM;EXT_SCHEMA_1_ID;SCHEMA_1;Schema;Physical Domain;Physical Data Dictionary;DBs Community;;;;
+EXT_SYSTEM;EXT_TABLE_1_ID;TABLE_1;Table;Physical Domain;Physical Data Dictionary;DBs Community;EXT_SYSTEM;EXT_SCHEMA_1_ID;;
+EXT_SYSTEM;EXT_TABLE_2_ID;TABLE_2;Table;Physical Domain;Physical Data Dictionary;DBs Community;EXT_SYSTEM;EXT_SCHEMA_1_ID;;
+EXT_SYSTEM;EXT_TABLE_1_COLUMN_1_ID;TAB_1_COLUMN_1;Column;Physical Domain;Physical Data Dictionary;DBs Community;;;EXT_SYSTEM;EXT_TABLE_1_ID
+EXT_SYSTEM;EXT_TABLE_1_COLUMN_2_ID;TAB_1_COLUMN_2;Column;Physical Domain;Physical Data Dictionary;DBs Community;;;EXT_SYSTEM;EXT_TABLE_1_ID
+EXT_SYSTEM;EXT_TABLE_2_COLUMN_1_ID;TAB_2_COLUMN_1;Column;Physical Domain;Physical Data Dictionary;DBs Community;;;EXT_SYSTEM;EXT_TABLE_2_ID

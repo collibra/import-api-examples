@@ -1,0 +1,77 @@
+[
+  {
+    "resourceType": "Domain",
+    "identifier": {
+      "name": "ImportDemo Domain",
+      "community": {
+        "name": "Data Governance Council"
+      }
+    },
+    "type": {
+      "name": "Glossary"
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "ImportDemoAsset1",
+      "domain": {
+        "name": "ImportDemo Domain",
+        "community": {
+          "name": "Data Governance Council"
+        }
+      }
+    },
+    "type": {
+      "name": "Business Term"
+    },
+    "attributes": {
+      "Definition": [
+        {
+          "value": "This is a 'Business Term' asset used for demo of Import API"
+        }
+      ]
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007030:TARGET": [
+        {
+          "name": "IDA1",
+          "domain": {
+            "name": "ImportDemo Domain",
+            "community": {
+              "name": "Data Governance Council"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "resourceType": "Asset",
+    "identifier": {
+      "name": "IDA1",
+      "domain": {
+        "name": "ImportDemo Domain",
+        "community": {
+          "name": "Data Governance Council"
+        }
+      }
+    },
+    "type": {
+      "name": "Acronym"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007030:SOURCE": [
+        {
+          "name": "ImportDemoAsset1",
+          "domain": {
+            "name": "ImportDemo Domain",
+            "community": {
+              "name": "Data Governance Council"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

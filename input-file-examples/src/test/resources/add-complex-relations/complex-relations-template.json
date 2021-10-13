@@ -1,0 +1,54 @@
+[
+  {
+    "resourceType": "Complex Relation",
+    "identifier": {
+      "externalSystemId": "{1}",
+      "externalEntityId": "{2}"
+    },
+    "complexRelationType": {
+      "name": "Field Mapping"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007088": [
+        {
+          "name": "${3}",
+          "domain": {
+            "name": "${4}",
+            "community": {
+              "name": "${5}"
+            }
+          }
+        }
+      ],
+      "00000000-0000-0000-0000-000000007089": [
+        {
+          "name": "${6}",
+          "domain": {
+            "name": "${7}",
+            "community": {
+              "name": "${8}"
+            }
+          }
+        }
+      ],
+      "00000000-0000-0000-0000-000000007090": [
+        {
+          "name": "${9}",
+          "domain": {
+            "name": "${10}",
+            "community": {
+              "name": "${11}"
+            }
+          }
+        }
+      ]
+    },
+    "attributes": {
+      "Description": [
+        {
+          "value": "${12}"
+        }
+      ]
+    }
+  }
+]

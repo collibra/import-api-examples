@@ -1,0 +1,72 @@
+[
+  {
+    "resourceType": "Complex Relation",
+    "identifier": {
+      "externalSystemId": "DB-Metadata-System",
+      "externalEntityId": "FieldMapping12345678"
+    },
+    "complexRelationType": {
+      "name": "Field Mapping"
+    },
+    "relations": {
+      "00000000-0000-0000-0000-000000007088": [
+        {
+          "name": "DB_COL_SOURCE_1",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        },
+        {
+          "name": "DB_COL_SOURCE_2",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ],
+      "00000000-0000-0000-0000-000000007089": [
+        {
+          "name": "DB_COL_TARGET_1",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        },
+        {
+          "name": "DB_COL_TARGET_2",
+          "domain": {
+            "name": "Physical Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ],
+      "00000000-0000-0000-0000-000000007090": [
+        {
+          "name": "MapSpec",
+          "domain": {
+            "name": "My Mapping Domain",
+            "community": {
+              "name": "DBs Community"
+            }
+          }
+        }
+      ]
+    },
+    "attributes": {
+      "Description": [
+        {
+          "value": "XXX_COLUMN_1"
+        }
+      ]
+    }
+  }
+]
