@@ -1,0 +1,2 @@
+Metric Id;Project Name;Scorecard Name;Score Name;Total Rows;Valid Percentage;Invalid Rows;Threshold;Max Time Created;Column Name;Column Domain Name;Column Community Name
+Test1 Metric Id;Test1 Project Name;Test1 Scorecard Name;Test1 Score Name;10;50;5;40;Test Max Time Created;TAB_1_COLUMN_1;Physical Domain;DBs Community

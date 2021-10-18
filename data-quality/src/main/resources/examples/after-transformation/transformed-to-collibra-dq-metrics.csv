@@ -1,0 +1,2 @@
+External Metric Id;Full Name;Passing Fraction;Threshold;Rows Passed;RowsFailed;Result;Loaded Rows;Column Asset Name;Column Domain Name;Column Community Name
+METRIC_ID;SandboxProject2 / Scorecard_Test1 / IMMINT__DQ_TEST__CUSTOMER_MASTER__FIRSTNAME__CONFORMITY__RULE_FAMILY;0;94;0;9;false;9;TAB_1_COLUMN_1;Physical Domain;DBs Community

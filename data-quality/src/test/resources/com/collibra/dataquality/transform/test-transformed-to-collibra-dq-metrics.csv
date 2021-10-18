@@ -1,0 +1,2 @@
+External Metric Id;Full Name;Passing Fraction;Threshold;Rows Passed;RowsFailed;Result;Loaded Rows;Column Asset Name;Column Domain Name;Column Community Name
+Test1 Metric Id;Test1 Project Name / Test1 Score Name / Test1 Scorecard Name;50.0;40.0;5;5;true;10;TAB_1_COLUMN_1;Physical Domain;DBs Community
