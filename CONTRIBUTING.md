@@ -6,7 +6,7 @@ Thank you for your interest in the Collibra Import API tutorial and examples pro
 To report an issue with this repository, we will be glad to help you through the usual channels, such as [Collibra Support](https://support.collibra.com/) or your Collibra representative. To directly submit some improvements to the code, we welcome any pull request and we will review it as soon as we can.
 
 We try to follow the following principles when contributing to this repository:
-- Use *import-api-java-client* as a generic module for building an import client we can base an application on.
+- Use *import-api-java-client* as a generic module for building an import client you can base an application on.
 - Use *import-api-tutorial* for simple applications that showcase how to use the different features of the import and synchronization components. Each tutorial application is based on reading one source file and is as linear as possible.
 - The *data-quality* is expected a simple example of a full application. 
 
