@@ -1,6 +1,6 @@
 # Collibra Import API tutorial and examples
 
-The Collibra Import API enhances your experience with data by giving you the tools to integrate your systems with the Collibra Platform. This project is meant both to teach you the basics of building an import-based integration application and get you started with your project. 
+The Collibra Import API enhances your experience with data by giving you the tools to integrate your systems with the Collibra Platform. This project is meant both to show you the basics of building an import-based integration application and to get you started with your project. 
 ___
 1. `$ git clone https://github.com/collibra/import-api-examples.git`
 2. Fill in required properties (collibra.url, collibra.username, collibra.password) in [config.properties](import-api-java-client/src/main/resources/config.properties) in **import-api-java-client\src\main\resources**
