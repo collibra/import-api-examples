@@ -1,0 +1,2 @@
+Metric Id;Project Name;Scorecard Name;Score Name;Total Rows;Valid Percentage;Invalid Rows;Threshold;Max Time Created;Column Name;Column Domain Name;Column Community Name
+U:ubvixO9tEeW3QVf6ueQUrQ;SandboxProject2;Scorecard_Test1;IMMINT_DQ_TESTCUSTOMER_MASTERFIRSTNAMECONFORMITY_RULE_FAMILY;9;0;9;94;2016-04-05T02:59:59.000Z;TAB_1_COLUMN_1;Physical Domain;DBs Community

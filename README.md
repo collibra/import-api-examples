@@ -9,11 +9,12 @@ ___
 
 This repository has the following sub-modules:
 
-- An [import-api-java-client](import-api-java-client/README.md) that helps you generate clients for the Import API.
-- An [input-file-examples](input-file-examples/README.md) project that demonstrates how to import communities, domains,
+- An [import-api-java-client](import-api-java-client/README.md) module that helps you generate clients for the Import API.
+- An [input-file-examples](input-file-examples/README.md) module that demonstrates how to import communities, domains,
   assets, relations, etc from CSV, Excel and JSON files.
-- An [import-api-tutorial module](import-api-tutorial/README.md) that demonstrates how to use the Import and
+- An [import-api-tutorial](import-api-tutorial/README.md) module that demonstrates how to use the Import and
   Synchronization APIs with series of examples.
+- A [data-quality](data-quality/README.md) module contains an example that imports **Data Quality Metrics** from an external system to the Collibra Platform.
 
 ## Collibra developer terms
 

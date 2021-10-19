@@ -48,7 +48,10 @@ dependencies {
 java {
     sourceSets.main {
         java {
-            srcDir(layout.buildDirectory.dir("generated-openapi/src/main/java"))
+            srcDirs(
+                    layout.buildDirectory.dir("generated-openapi/src/main/java"),
+                    layout.buildDirectory.dir("generated-params/main")
+            )
         }
     }
 }
