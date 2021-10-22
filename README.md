@@ -19,9 +19,10 @@ This repository has the following sub-modules:
 ## Collibra developer terms
 
 This repository is part of the Collibra Developer Toolkit. By using or accessing the Developer Toolkit, you agree to
-the [Collibra Developer Terms](https://www.collibra.com/developer-terms).
+the [Collibra Developer Terms](https://www.collibra.com/developer-terms). In particular, please note that per section 11 for those terms, Collibra has no obligation to provide any maintenance or support for the Developer Toolkit (or to end users of your Add-Ons) or to fix any errors or defects.
 
-The code provided in this repository is available under the [following license](LICENSE.md). 
+The code provided in this repository is available under the [following license](LICENSE.md).
+
 ## Additional resources
 
 - [Collibra Developer Portal](https://developer.collibra.com/)
