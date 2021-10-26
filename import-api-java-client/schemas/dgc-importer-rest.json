@@ -35,8 +35,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -129,8 +130,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -206,8 +208,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -450,8 +453,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -570,8 +574,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -672,8 +677,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -758,8 +764,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -875,8 +882,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -977,8 +985,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -1062,8 +1071,9 @@
                   "batchSize" : {
                     "minimum" : 1,
                     "type" : "integer",
-                    "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
+                    "deprecated": true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -1227,8 +1237,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -1560,8 +1571,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -1705,8 +1717,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -1833,8 +1846,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -1910,8 +1924,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -1976,8 +1991,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -2029,8 +2045,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -2106,8 +2123,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -2172,8 +2190,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
@@ -2235,8 +2254,9 @@
           "batchSize" : {
             "minimum" : 1,
             "type" : "integer",
-            "description" : "The size of the batch. <b>The default value</b> is <code>1000</code>.",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
+            "deprecated": true,
             "default" : 1000
           },
           "simulation" : {
