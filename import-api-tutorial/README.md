@@ -47,8 +47,8 @@ This module has the following classes and resources:
 
 ## Project configuration
 
-The configuration properties are located in the [**
-config.properties**](../import-api-java-client/src/main/resources/config.properties) file. The following properties are
+The configuration properties are located in the
+[**config.properties**](../import-api-java-client/src/main/resources/config.properties) file. The following properties are
 required to execute the classes in this module:
 
 - collibra.url
