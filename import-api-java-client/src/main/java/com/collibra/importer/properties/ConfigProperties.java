@@ -26,10 +26,10 @@ public final class ConfigProperties {
 		checkIfPropertyIsBlank(COLLIBRA_URL_PROPERTY);
 		checkIfPropertyIsBlank(COLLIBRA_USERNAME_PROPERTY);
 		checkIfPropertyIsBlank(COLLIBRA_PASSWORD_PROPERTY);
-		checkIfPropertyIsBlank(COLLIBRA_EXTERNAL_SYSTEM_METRIC_FILE);
-		checkIfPropertyIsBlank(COLLIBRA_DQ_METRICS_COMMUNITY_NAME);
-		checkIfPropertyIsBlank(COLLIBRA_DQ_METRICS_DOMAIN_NAME);
-		checkIfPropertyIsBlank(COLLIBRA_EXTERNAL_SYSTEM_ID);
+//		checkIfPropertyIsBlank(COLLIBRA_EXTERNAL_SYSTEM_METRIC_FILE);
+//		checkIfPropertyIsBlank(COLLIBRA_DQ_METRICS_COMMUNITY_NAME);
+//		checkIfPropertyIsBlank(COLLIBRA_DQ_METRICS_DOMAIN_NAME);
+//		checkIfPropertyIsBlank(COLLIBRA_EXTERNAL_SYSTEM_ID);
 	}
 
 	public static String getCollibraUrl() {
