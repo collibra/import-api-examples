@@ -6,7 +6,7 @@ to import CSV and Excel files.
 ## Table of contents
 
 1. [Project structure](#project-structure)
-1. [Project Configuration](#project-configuration)
+1. [Project Environment Variables](#project-environment-variables)
 1. [Test](#tests)   
 1. [Collibra developer terms](#collibra-developer-terms)
 1. [Additional resources](#additional-resources)
@@ -27,20 +27,19 @@ The dependency `jsonschema2pojo-gradle-plugin` was used to generate the POJO cla
 
 See [build.gradle.kts](build.gradle.kts) for more information.
 
+<a name="project-environment-variables"></a>
 
-<a name="project-configuration"></a>
-## Project configuration
+## Project Environment Variables
 
-The configuration properties are located in the [**config.properties**](src/main/resources/config.properties) file.
-All properties are required to access the Collibra Platform and run the DataQuality tests and DataImporterTest.
+All variables are required to access the Collibra Platform and run the DataQuality tests and DataImporterTest.
 
-**Configuration to set up your Collibra environment**
+**Environment Variables to set up your Collibra environment**
 
 Parameter | Description | Example
 --- | --- | ---
-collibra.url | The base URL of your Collibra environment.  | https://collibra-example.com
-collibra.username | The user name to be used by the API clients. | john.doe
-collibra.password | The password to be used by the API clients. | password
+DGC_URL | The base URL of your Collibra environment.  | DGC_URL=https://collibra-example.com
+DGC_USERNAME | The user name to be used by the API clients. | DGC_USERNAME=john.doe
+DGC_PASSWORD | The password to be used by the API clients. | DGC_PASSWORD=password
 
 <a name="tests"></a>
 ## Tests

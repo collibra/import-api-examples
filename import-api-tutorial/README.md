@@ -8,7 +8,7 @@ ___
 ## Table of contents
 
 1. [Project structure](#project-structure)
-1. [Project configuration](#project-configuration)
+1. [Project Environment Variables](#project-environment-variables)
 1. [Collibra developer terms](#collibra-developer-terms)
 1. [Additional resources](#additional-resources)
 
@@ -45,15 +45,15 @@ This module has the following classes and resources:
 - [Demo5_SynchronizeBatch2.json](src/main/resources/Demo5_SynchronizeBatch2.json) - Batch2 resources for Synchronization
   Refresh. Contains 2 assets.
 
-## Project configuration
+<a name="project-environment-variables"></a>
 
-The configuration properties are located in the
-[**config.properties**](../import-api-java-client/src/main/resources/config.properties) file. The following properties are
-required to execute the classes in this module:
+## Project Environment Variables
 
-- collibra.url
-- collibra.username
-- collibra.password
+The following variables are required to execute the classes in this module:
+
+- DGC_URL
+- DGC_USERNAME
+- DGC_PASSWORD
 
 ## Collibra developer terms
 
