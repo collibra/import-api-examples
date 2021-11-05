@@ -3,7 +3,7 @@
 The Collibra Import API enhances your experience with data by giving you the tools to integrate your systems with the Collibra Platform. This project is meant both to show you the basics of building an import-based integration application and to get you started with your project. 
 ___
 1. `$ git clone https://github.com/collibra/import-api-examples.git`
-2. Fill in required properties (collibra.url, collibra.username, collibra.password) in [config.properties](import-api-java-client/src/main/resources/config.properties) in **import-api-java-client\src\main\resources**
+2. Set the required environment variables (DGC_URL, DGC_USERNAME, DGC_PASSWORD)
 3. `$ ./gradlew build` to compile the code in all the 3 modules and to run the unit tests.<br/>Add `-PIGNORE_TEST_FAILURES` if you don't have a running dgc instance, but want to generate the client anyway.
 ___
 

@@ -13,9 +13,9 @@ public final class ConfigProperties {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("config");
 
-	private static final String COLLIBRA_URL_PROPERTY = "collibra.url";
-	private static final String COLLIBRA_USERNAME_PROPERTY = "collibra.username";
-	private static final String COLLIBRA_PASSWORD_PROPERTY = "collibra.password";
+	private static final String COLLIBRA_URL_PROPERTY = "DGC_URL";
+	private static final String COLLIBRA_USERNAME_PROPERTY = "DGC_USERNAME";
+	private static final String COLLIBRA_PASSWORD_PROPERTY = "DGC_PASSWORD";
 
 	private static final String COLLIBRA_EXTERNAL_SYSTEM_METRIC_FILE = "collibra.external-system-metric-file";
 	private static final String COLLIBRA_DQ_METRICS_COMMUNITY_NAME = "collibra.dq-metrics-community-name";
@@ -23,9 +23,9 @@ public final class ConfigProperties {
 	private static final String COLLIBRA_EXTERNAL_SYSTEM_ID = "collibra.external-system-id";
 
 	static {
-		checkIfPropertyIsBlank(COLLIBRA_URL_PROPERTY);
-		checkIfPropertyIsBlank(COLLIBRA_USERNAME_PROPERTY);
-		checkIfPropertyIsBlank(COLLIBRA_PASSWORD_PROPERTY);
+		getCollibraUrl();
+		getCollibraUsername();
+		getCollibraPassword();
 		checkIfPropertyIsBlank(COLLIBRA_EXTERNAL_SYSTEM_METRIC_FILE);
 		checkIfPropertyIsBlank(COLLIBRA_DQ_METRICS_COMMUNITY_NAME);
 		checkIfPropertyIsBlank(COLLIBRA_DQ_METRICS_DOMAIN_NAME);
@@ -33,15 +33,15 @@ public final class ConfigProperties {
 	}
 
 	public static String getCollibraUrl() {
-		return RESOURCE_BUNDLE.getString(COLLIBRA_URL_PROPERTY);
+		return getSystemProperty(COLLIBRA_URL_PROPERTY);
 	}
 
 	public static String getCollibraUsername() {
-		return RESOURCE_BUNDLE.getString(COLLIBRA_USERNAME_PROPERTY);
+		return getSystemProperty(COLLIBRA_USERNAME_PROPERTY);
 	}
 
 	public static String getCollibraPassword() {
-		return RESOURCE_BUNDLE.getString(COLLIBRA_PASSWORD_PROPERTY);
+		return getSystemProperty(COLLIBRA_PASSWORD_PROPERTY);
 	}
 
 	public static String getCollibraExternalSystemMetricsFile() {
@@ -64,6 +64,17 @@ public final class ConfigProperties {
 		if (StringUtils.isBlank(RESOURCE_BUNDLE.getString(propertyKey))) {
 			throw new BlankPropertyException(propertyKey);
 		}
+	}
+
+	private static String getSystemProperty(String property) {
+		String value = System.getProperty(property);
+		if (StringUtils.isBlank(value)) {
+			value = System.getenv(property);
+		}
+		if (StringUtils.isBlank(value)) {
+			throw new BlankPropertyException(property);
+		}
+		return value;
 	}
 
 }

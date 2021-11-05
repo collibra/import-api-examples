@@ -8,7 +8,6 @@ ___
 ## Table of contents
 
 1. [Project structure](#project-structure)
-1. [Project configuration](#project-configuration)
 1. [Collibra developer terms](#collibra-developer-terms)
 1. [Additional resources](#additional-resources)
 
@@ -44,16 +43,6 @@ This module has the following classes and resources:
   refresh. Contains 2 assets.
 - [Demo5_SynchronizeBatch2.json](src/main/resources/Demo5_SynchronizeBatch2.json) - Batch2 resources for Synchronization
   Refresh. Contains 2 assets.
-
-## Project configuration
-
-The configuration properties are located in the
-[**config.properties**](../import-api-java-client/src/main/resources/config.properties) file. The following properties are
-required to execute the classes in this module:
-
-- collibra.url
-- collibra.username
-- collibra.password
 
 ## Collibra developer terms
 
