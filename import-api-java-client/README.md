@@ -6,7 +6,7 @@ to import CSV and Excel files.
 ## Table of contents
 
 1. [Project structure](#project-structure)
-1. [Project Environment Variables](#project-environment-variables)
+1. [Project Configuration](#project-configuration)
 1. [Test](#tests)   
 1. [Collibra developer terms](#collibra-developer-terms)
 1. [Additional resources](#additional-resources)
@@ -27,11 +27,11 @@ The dependency `jsonschema2pojo-gradle-plugin` was used to generate the POJO cla
 
 See [build.gradle.kts](build.gradle.kts) for more information.
 
-<a name="project-environment-variables"></a>
+<a name="project-configuration"></a>
 
-## Project Environment Variables
+## Project Configuration
 
-All variables are required to access the Collibra Platform and run the DataQuality tests and DataImporterTest.
+The configuration properties are located in the [**config.properties**](src/main/resources/config.properties) file. All variables are required to access the Collibra Platform and run the DataQuality tests and DataImporterTest.
 
 **Environment Variables to set up your Collibra environment**
 
