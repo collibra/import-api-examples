@@ -1,3 +1,3 @@
 Reporting a vulnerability
 =========================
-Please contact security-vulnerability@collibra.com to report any issue related to security. 
+To report any security related issue, contact security-vulnerability@collibra.com.
