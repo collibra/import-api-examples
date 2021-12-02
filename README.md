@@ -23,6 +23,9 @@ the [Collibra Developer Terms](https://www.collibra.com/developer-terms), includ
 
 The code provided in this repository is available under the [following license](LICENSE.md).
 
+## Security
+- [Security Policy](SECURITY.md).
+
 ## Additional resources
 
 - [Collibra Developer Portal](https://developer.collibra.com/)
