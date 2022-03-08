@@ -1,4 +1,0 @@
-﻿Type;Community;Domain Type;Domain;Name;Contains Table [Schema] > Community;Contains Table [Schema] > Domain;Contains Table [Schema] > Name;Is part of [Table] > Community;Is part of [Table] > Domain;Is part of [Table] > Name
-Schema;DBs Community;Physical Data Dictionary;Physical Domain;DB_SCHEMA;;;;;;
-Table;DBs Community;Physical Data Dictionary;Physical Domain;DB_TABLE;DBs Community;Physical Domain;DB_SCHEMA;;;
-Column;DBs Community;Physical Data Dictionary;Physical Domain;DB_COLUMN;;;;DBs Community;Physical Domain;DB_TABLE
