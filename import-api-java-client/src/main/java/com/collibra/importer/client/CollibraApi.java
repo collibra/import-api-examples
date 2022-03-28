@@ -1,6 +1,8 @@
 package com.collibra.importer.client;
 
 import com.collibra.core.rest.client.api.AssetsApi;
+import com.collibra.core.rest.client.api.AttributeTypesApi;
+import com.collibra.core.rest.client.api.CommunitiesApi;
 import com.collibra.core.rest.client.api.JobsApi;
 import com.collibra.importer.rest.client.api.ImportApi;
 
@@ -42,5 +44,23 @@ public final class CollibraApi {
 	public AssetsApi assetsApi() {
 		return coreApiClient.buildClient(AssetsApi.class);
 	}
+
+	/**
+	 * Gets Communities API Client with specified Authentication and URL to specific Collibra instance.
+	 * @return Communities API
+	 */
+	public CommunitiesApi communitiesApi() {
+		return coreApiClient.buildClient(CommunitiesApi.class);
+	}
+
+	/**
+	 * Gets AttributeTypes API Client with specified Authentication and URL to specific Collibra instance.
+	 * @return AttributeTypes API
+	 */
+	public AttributeTypesApi attributeTypesApi() {
+		return coreApiClient.buildClient(AttributeTypesApi.class);
+	}
+
+
 
 }

@@ -9,7 +9,7 @@
 <a name="preconditions"></a>
 ### Preconditions
 - To execute following example there is a need to import file with assets before.
-Import files can be found in example: [Add community, domain, assets with relations](../add-community-domain-assets-with-relations/README.md)
+Import files can be found in example: [Add community, domain, assets with relations](../add-community-domain-with-tables-columns/README.md)
 - Listed resources below have not existed before.
 
 

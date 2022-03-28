@@ -3,8 +3,28 @@
     "resourceType": "Community",
     "identifier": {
       "name": "${2}"
-    }
-  },
+    },
+    "responsibilities": {
+      "Business Steward": [
+        {
+          "userGroup": {
+            "id": "${6}"
+          }
+        },
+        {
+          "user": {
+            "id": "${7}"
+          }
+        }
+      ],
+      "00000000-0000-0000-0000-000000005035": [
+        {
+          "userGroup": {
+            "id": "${6}"
+          }
+        }
+      ]
+    }  },
   {
     "resourceType": "Domain",
     "identifier": {
@@ -15,6 +35,15 @@
     },
     "type": {
       "name": "${3}"
+    },
+    "responsibilities": {
+      "Reviewer": [
+        {
+          "user": {
+            "id": "${7}"
+          }
+        }
+      ]
     }
   },
   {
@@ -30,32 +59,6 @@
     },
     "type": {
       "name": "${1}"
-    },
-    "responsibilities": {
-      "Data Steward": [
-        {
-          "user": {
-            "userName": "${6}"
-          }
-        },
-        {
-          "userGroup": {
-            "id": "${7}"
-          }
-        },
-        {
-          "userGroup": {
-            "name": "${8}"
-          }
-        }
-      ],
-      "00000000-0000-0000-0000-000000005032": [
-        {
-          "user": {
-            "id": "${9}"
-          }
-        }
-      ]
     }
   }
 ]

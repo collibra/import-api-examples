@@ -40,7 +40,7 @@ curl -X POST 'https://<your_collibra_platform_url>/rest/2.0/import/csv-job' \
 ```
 
 ## Examples:
- 1. [Add community, domain, assets with relations](add-community-domain-assets-with-relations/README.md)
+ 1. [Add community, domain, assets with relations](add-community-domain-with-tables-columns/README.md)
  1. [Add mappings for assets](add-mappings-for-assets/README.md)
  1. [Add assets with implicit creation of mappings](add-assets-with-implicit-mappings/README.md)
  1. [Change asset using its mapping for identification](change-assets-identified-by-mappings/README.md)
