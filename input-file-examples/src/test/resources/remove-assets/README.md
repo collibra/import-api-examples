@@ -10,7 +10,7 @@
 <a name="preconditions"></a>
 ### Preconditions
 - To execute following example there is a need to import file with assets before.
-Import files can be found in example: [Add Community, Domain, Assets with Relations](../add-community-domain-assets-with-relations/README.md)
+Import files can be found in example: [Add Community, Domain, Assets with Relations](../add-community-domain-with-tables-columns/README.md)
 
 
 <a name="description"></a>

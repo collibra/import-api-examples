@@ -11,7 +11,7 @@
 - To execute following example there is a need to import asset and mapping to an asset.
 With examples which are available in this repository it can be achieved:
 
-    - a) import file with assets which can be found here: [Add community, domain, assets with relations](../add-community-domain-assets-with-relations/README.md)
+    - a) import file with assets which can be found here: [Add community, domain, assets with relations](../add-community-domain-with-tables-columns/README.md)
     - b) import file with mappings of assets created in previous step, file can be found here: [Add Mappings for Assets](../add-mappings-for-assets/README.md)
     
     or

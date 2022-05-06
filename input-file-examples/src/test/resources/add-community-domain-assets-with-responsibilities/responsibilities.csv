@@ -1,4 +1,4 @@
-Type;Community;Domain Type;Domain;Name;Roles > Data Steward > User Name;Roles > Data Steward > Group Id;Roles > Data Steward > Group Name;Roles > Reviewer > User Id
-Schema;DBs Community;Physical Data Dictionary;Physical Domain;DB_SCHEMA;john.doe;;;e060bb6e-df51-466f-903f-af08142c2e9a
-Schema;DBs Community;Physical Data Dictionary;Physical Domain;DB_SCHEMA;;471f5852-1d19-4d74-a70f-989100c3c878;;
-Schema;DBs Community;Physical Data Dictionary;Physical Domain;DB_SCHEMA;;;Data Citizens;
+Type;Community;Domain Type;Domain;Name;Roles > Group Id;Roles > User Id
+Schema;DBs Community;Physical Data Dictionary;Physical Domain;DB_SCHEMA;;00000000-0000-0000-0000-000000900003;
+Schema;DBs Community;Physical Data Dictionary;Physical Domain;DB_SCHEMA;00000000-0000-0000-0000-000001000003;;
+Schema;DBs Community;Physical Data Dictionary;Physical Domain;DB_SCHEMA;;;
