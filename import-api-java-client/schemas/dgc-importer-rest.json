@@ -1,9 +1,10 @@
 {
-  "openapi" : "3.0.1",
+  "openapi" : "3.0.3",
   "info" : {
     "title" : "Collibra Import API",
-    "description" : "The Import API is an efficient way to load large volumes of data into the Collibra Data Governance Center. The API can automatically differentiate between creating and updating data.",
-    "version" : "2.0"
+    "description" : "<p>The Import API is an efficient way to load large volumes of data into the Collibra Data Governance Center. The API can automatically differentiate between creating and updating data.</p>",
+    "version" : "2.0",
+    "x-audience" : "public"
   },
   "servers" : [ {
     "url" : "/rest/2.0",
@@ -12,8 +13,128 @@
   "tags" : [ {
     "name" : "Import",
     "description" : "Large volume import operations"
+  }, {
+    "name" : "Import Results",
+    "description" : "Additional information about finished import jobs"
   } ],
   "paths" : {
+    "/import/csv-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts import from the CSV file in job (asynchronously).",
+        "description" : "Starts import from the CSV file in job (asynchronously).\n\n<br/><p>Request can either accept <code>id</code> of the uploaded file that contains CSV input which should be used for import - or the file itself.</p>",
+        "operationId" : "importCsvInJob",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "escape", "quote", "separator", "template" ],
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
+                    "format" : "int32",
+                    "deprecated" : true,
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "default" : false
+                  },
+                  "fileId" : {
+                    "type" : "string",
+                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+                    "format" : "uuid"
+                  },
+                  "file" : {
+                    "type" : "string",
+                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "format" : "binary"
+                  },
+                  "fileName" : {
+                    "type" : "string",
+                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+                    "default" : "import_file"
+                  },
+                  "deleteFile" : {
+                    "type" : "boolean",
+                    "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "separator" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used to separate entries. <b>The default value</b> is <code>';'</code>.",
+                    "default" : ";"
+                  },
+                  "quote" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used for quoted entries. <b>The default value</b>  is <code>'\"'</code>.",
+                    "default" : "\""
+                  },
+                  "escape" : {
+                    "type" : "string",
+                    "description" : "The delimiter character used to escape separator or quote character. <b>The default value</b> is <code>'\\\\'</code>.",
+                    "default" : "\\"
+                  },
+                  "strictQuotes" : {
+                    "type" : "boolean",
+                    "description" : "Whether the characters outside quotes should be ignored. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "ignoreLeadingWhitespace" : {
+                    "type" : "boolean",
+                    "description" : "Whether whitespace characters before quotes should be ignored. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "headerRow" : {
+                    "type" : "boolean",
+                    "description" : "Whether the first row of the imported CSV file is the header. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "template" : {
+                    "type" : "string",
+                    "description" : "The template that should be used for parsing and importing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Import job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
     "/import/excel-job" : {
       "post" : {
         "tags" : [ "Import" ],
@@ -37,7 +158,7 @@
                     "type" : "integer",
                     "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
-                    "deprecated": true,
+                    "deprecated" : true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -48,6 +169,11 @@
                   "saveResult" : {
                     "type" : "boolean",
                     "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "fileId" : {
@@ -132,7 +258,7 @@
                     "type" : "integer",
                     "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
-                    "deprecated": true,
+                    "deprecated" : true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -143,6 +269,11 @@
                   "saveResult" : {
                     "type" : "boolean",
                     "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "fileId" : {
@@ -164,6 +295,11 @@
                     "type" : "boolean",
                     "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
                     "default" : false
+                  },
+                  "relationsAction" : {
+                    "pattern" : "ADD_OR_IGNORE|REPLACE",
+                    "type" : "string",
+                    "description" : "Should it replace existing relations or add/update if any during refresh"
                   }
                 }
               }
@@ -187,125 +323,22 @@
         } ]
       }
     },
-    "/import/csv-job" : {
-      "post" : {
-        "tags" : [ "Import" ],
-        "summary" : "Starts import from the CSV file in job (asynchronously).",
-        "description" : "Starts import from the CSV file in job (asynchronously).\n\n<br/><p>Request can either accept <code>id</code> of the uploaded file that contains CSV input which should be used for import - or the file itself.</p>",
-        "operationId" : "importCsvInJob",
-        "requestBody" : {
-          "content" : {
-            "multipart/form-data" : {
-              "schema" : {
-                "required" : [ "escape", "quote", "separator", "template" ],
-                "type" : "object",
-                "properties" : {
-                  "sendNotification" : {
-                    "type" : "boolean",
-                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
-                    "default" : false
-                  },
-                  "batchSize" : {
-                    "minimum" : 1,
-                    "type" : "integer",
-                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
-                    "format" : "int32",
-                    "deprecated": true,
-                    "default" : 1000
-                  },
-                  "simulation" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "saveResult" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "fileId" : {
-                    "type" : "string",
-                    "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
-                    "format" : "uuid"
-                  },
-                  "file" : {
-                    "type" : "string",
-                    "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
-                    "format" : "binary"
-                  },
-                  "fileName" : {
-                    "type" : "string",
-                    "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
-                    "default" : "import_file"
-                  },
-                  "deleteFile" : {
-                    "type" : "boolean",
-                    "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
-                    "default" : false
-                  },
-                  "separator" : {
-                    "type" : "string",
-                    "description" : "The delimiter character used to separate entries. <b>The default value</b> is <code>';'</code>.",
-                    "default" : ";"
-                  },
-                  "quote" : {
-                    "type" : "string",
-                    "description" : "The delimiter character used for quoted entries. <b>The default value</b>  is <code>'\"'</code>.",
-                    "default" : "\""
-                  },
-                  "escape" : {
-                    "type" : "string",
-                    "description" : "The delimiter character used to escape separator or quote character. <b>The default value</b> is <code>'\\\\'</code>.",
-                    "default" : "\\"
-                  },
-                  "strictQuotes" : {
-                    "type" : "boolean",
-                    "description" : "Whether the characters outside quotes should be ignored. <b>The default value</b> is <code>false</code>.",
-                    "default" : false
-                  },
-                  "ignoreLeadingWhitespace" : {
-                    "type" : "boolean",
-                    "description" : "Whether whitespace characters before quotes should be ignored. <b>The default value</b> is <code>false</code>.",
-                    "default" : false
-                  },
-                  "headerRow" : {
-                    "type" : "boolean",
-                    "description" : "Whether the first row of the imported CSV file is the header. <b>The default value</b> is <code>false</code>.",
-                    "default" : false
-                  },
-                  "template" : {
-                    "type" : "string",
-                    "description" : "The template that should be used for parsing and importing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Import job successfully started.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Job"
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "basicAuth" : [ ]
-        } ]
-      }
-    },
-    "/import/synchronize" : {
+    "/import/results/{jobId}/errors" : {
       "get" : {
-        "tags" : [ "Import" ],
-        "summary" : "Returns synchronization information matching the given search criteria.",
-        "description" : "Returns synchronization information matching the given search criteria.<p>Only parameters that are specified in this request and have not <code>null</code> values are used for filtering. All other parameters are ignored.</p><p>The returned synchronization information satisfies all constraints that are specified in this search criteria. By default a result containing 1000 synchronization infos is returned.</p>",
-        "operationId" : "findSynchronizationInfos",
+        "tags" : [ "Import Results" ],
+        "summary" : "List the errors of a finished import job.",
+        "description" : "Returns import errors of a finished import job identified by given <code>jobId</code>. By default a result containing 1000 errors is returned.",
+        "operationId" : "findImportErrors",
         "parameters" : [ {
+          "name" : "jobId",
+          "in" : "path",
+          "description" : "The ID of the job",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
           "name" : "offset",
           "in" : "query",
           "description" : "The first result to retrieve. If not set (offset = <code>0</code>), results will be retrieved starting from row <code>0</code>.",
@@ -323,17 +356,32 @@
             "format" : "int32",
             "default" : 0
           }
+        }, {
+          "name" : "countLimit",
+          "in" : "query",
+          "description" : "Allows to limit the number of elements that will be counted. -1 will count everything and 0 will cause the count to be skipped",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : -1
+          }
         } ],
         "responses" : {
           "200" : {
-            "description" : "The paged response with found synchronization information.",
+            "description" : "Import errors paged response",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/PagedResponseSynchronizationInfo"
+                  "$ref" : "#/components/schemas/ImportErrorPagedResponse"
                 }
               }
             }
+          },
+          "404" : {
+            "description" : "Import job not found"
+          },
+          "400" : {
+            "description" : "Import job is not finished"
           }
         },
         "security" : [ {
@@ -341,24 +389,38 @@
         } ]
       }
     },
-    "/import/synchronize/{synchronizationId}" : {
-      "delete" : {
-        "tags" : [ "Import" ],
-        "summary" : "Removes all information about synchronization process corresponding to provided synchronization id.",
-        "description" : "Removes all information about synchronization process corresponding to provided synchronization <code>id</code>.<p>This operation stops tracking of synchronization identified by provided synchronization <code>id</code>. The next synchronization process specified with this <code>id</code> will not be able to detect resources that should be removed.</p>",
-        "operationId" : "removeSynchronization",
+    "/import/results/{jobId}/summary" : {
+      "get" : {
+        "tags" : [ "Import Results" ],
+        "summary" : "Retrieve a summary of a finished import job.",
+        "description" : "Retrieve a summary of a finished import job.",
+        "operationId" : "getImportJobSummary",
         "parameters" : [ {
-          "name" : "synchronizationId",
+          "name" : "jobId",
           "in" : "path",
-          "description" : "The synchronization id of the operation.",
+          "description" : "The ID of the job",
           "required" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "format" : "uuid"
           }
         } ],
         "responses" : {
-          "204" : {
-            "description" : "Synchronization successfully untracked."
+          "200" : {
+            "description" : "Import job summary",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImportSummary"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Import job not found"
+          },
+          "400" : {
+            "description" : "Import job is not finished"
           }
         },
         "security" : [ {
@@ -369,8 +431,8 @@
     "/import/synchronize/{synchronizationId}/evict" : {
       "delete" : {
         "tags" : [ "Import" ],
-        "summary" : "Removes all cache entries corresponding to provided synchronization id.",
-        "description" : "Removes all cache entries corresponding to provided synchronization <code>id</code>.<p>This operation does not stop tracking of synchronization identified by provided synchronization <code>id</code>. The next synchronization process specified with this <code>id</code> will still be able to detect resources that should be removed.</p><p>Note though that all commands will be considered for synchronization, even though some resources did not change between two consecutive synchronization processes.</p>",
+        "summary" : "Removes all cache entries corresponding to the provided synchronization id.",
+        "description" : "Removes all cache entries corresponding to the provided synchronization <code>id</code>.<p>The synchronization component is optimized to only execute commands that differ from cycle to cycle. Call this method to clear the command cache and force the execution of all commands in this cycle.</p><p>Note: this operation does not stop the tracking of the resources identified by the provided synchronization <code>id</code>. The next synchronization process usingthe same <code>id</code> will still be able to detect resources that should be removed.</p>",
         "operationId" : "evictSynchronizationCache",
         "parameters" : [ {
           "name" : "synchronizationId",
@@ -423,6 +485,82 @@
         } ]
       }
     },
+    "/import/synchronize" : {
+      "get" : {
+        "tags" : [ "Import" ],
+        "summary" : "Returns synchronization information matching the given search criteria.",
+        "description" : "Returns synchronization information matching the given search criteria.<p>Only parameters that are specified in this request and have not <code>null</code> values are used for filtering. All other parameters are ignored.</p><p>The returned synchronization information satisfies all constraints that are specified in this search criteria. By default a result containing 1000 synchronization infos is returned.</p>",
+        "operationId" : "findSynchronizationInfos",
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "The first result to retrieve. If not set (offset = <code>0</code>), results will be retrieved starting from row <code>0</code>.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "The maximum number of results to retrieve. If not set (limit = <code>0</code>), the default limit will be used.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "countLimit",
+          "in" : "query",
+          "description" : "Allows to limit the number of elements that will be counted. -1 will count everything and 0 will cause the count to be skipped",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : -1
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The paged response with found synchronization information.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PagedResponseSynchronizationInfo"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}" : {
+      "delete" : {
+        "tags" : [ "Import" ],
+        "summary" : "Removes all information about synchronization process corresponding to provided synchronization id.",
+        "description" : "Removes all information about synchronization process corresponding to provided synchronization <code>id</code>.<p>This operation stops tracking of synchronization identified by provided synchronization <code>id</code>. The next synchronization process specified with this <code>id</code> will not be able to detect resources that should be removed.</p>",
+        "operationId" : "removeSynchronization",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id of the operation.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Synchronization successfully untracked."
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
     "/import/synchronize/{synchronizationId}/batch/csv-job" : {
       "post" : {
         "tags" : [ "Import" ],
@@ -435,6 +573,8 @@
           "description" : "The synchronization id used to distinguish different synchronizations.",
           "required" : true,
           "schema" : {
+            "maxLength" : 50,
+            "minLength" : 1,
             "type" : "string"
           }
         } ],
@@ -455,7 +595,7 @@
                     "type" : "integer",
                     "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
-                    "deprecated": true,
+                    "deprecated" : true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -466,6 +606,11 @@
                   "saveResult" : {
                     "type" : "boolean",
                     "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "fileId" : {
@@ -556,6 +701,8 @@
           "description" : "The synchronization id used to distinguish different synchronizations.",
           "required" : true,
           "schema" : {
+            "maxLength" : 50,
+            "minLength" : 1,
             "type" : "string"
           }
         } ],
@@ -576,7 +723,7 @@
                     "type" : "integer",
                     "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
-                    "deprecated": true,
+                    "deprecated" : true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -587,6 +734,11 @@
                   "saveResult" : {
                     "type" : "boolean",
                     "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "fileId" : {
@@ -660,6 +812,8 @@
           "description" : "The synchronization id used to distinguish different synchronizations.",
           "required" : true,
           "schema" : {
+            "maxLength" : 50,
+            "minLength" : 1,
             "type" : "string"
           }
         } ],
@@ -679,7 +833,7 @@
                     "type" : "integer",
                     "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
-                    "deprecated": true,
+                    "deprecated" : true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -690,6 +844,11 @@
                   "saveResult" : {
                     "type" : "boolean",
                     "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "fileId" : {
@@ -711,6 +870,11 @@
                     "type" : "boolean",
                     "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
                     "default" : false
+                  },
+                  "relationsAction" : {
+                    "pattern" : "ADD_OR_IGNORE|REPLACE",
+                    "type" : "string",
+                    "description" : "Should it replace existing relations or add/update if any during refresh"
                   }
                 }
               }
@@ -746,6 +910,8 @@
           "description" : "The synchronization id used to distinguish different synchronizations.",
           "required" : true,
           "schema" : {
+            "maxLength" : 50,
+            "minLength" : 1,
             "type" : "string"
           }
         } ],
@@ -766,7 +932,7 @@
                     "type" : "integer",
                     "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
-                    "deprecated": true,
+                    "deprecated" : true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -777,6 +943,11 @@
                   "saveResult" : {
                     "type" : "boolean",
                     "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "fileId" : {
@@ -864,6 +1035,8 @@
           "description" : "The synchronization id used to distinguish different synchronizations.",
           "required" : true,
           "schema" : {
+            "maxLength" : 50,
+            "minLength" : 1,
             "type" : "string"
           }
         } ],
@@ -884,7 +1057,7 @@
                     "type" : "integer",
                     "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
-                    "deprecated": true,
+                    "deprecated" : true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -895,6 +1068,11 @@
                   "saveResult" : {
                     "type" : "boolean",
                     "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "fileId" : {
@@ -956,18 +1134,20 @@
         } ]
       }
     },
-    "/import/synchronize/{synchronizationId}/json-job" : {
+    "/import/synchronize/{synchronizationId}/finalize/job" : {
       "post" : {
         "tags" : [ "Import" ],
-        "summary" : "Starts full synchronization from the JSON file in job (asynchronously).",
-        "description" : "Starts full synchronization from the JSON file in job (asynchronously).<p>Request can either accept <code>id</code> of the uploaded file that contains JSON input which should be used for import or the file itself. The input file is treated as a full input of synchronization process.</p>",
-        "operationId" : "synchronizeJsonInJob",
+        "summary" : "Starts synchronization finalization in job (asynchronously).",
+        "description" : "Starts synchronization finalization in job (asynchronously).<p>Note that while the only mandatory parameter is <code>synchronizationId</code>, requests that omit all optional parameters fail because the multipart-based setup requires at least one part to be present in the body. To meet this requirement and still use all the default values, you can pass a dummy part, for example <code>-F 'foo=bar'</code> if using <code>curl</code>.",
+        "operationId" : "synchronizeFinalizeInJob",
         "parameters" : [ {
           "name" : "synchronizationId",
           "in" : "path",
-          "description" : "The synchronization id used to distinguish different synchronizations.",
+          "description" : "The synchronization ID used to distinguish different synchronizations.",
           "required" : true,
           "schema" : {
+            "maxLength" : 50,
+            "minLength" : 1,
             "type" : "string"
           }
         } ],
@@ -987,7 +1167,7 @@
                     "type" : "integer",
                     "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
                     "format" : "int32",
-                    "deprecated": true,
+                    "deprecated" : true,
                     "default" : 1000
                   },
                   "simulation" : {
@@ -998,6 +1178,107 @@
                   "saveResult" : {
                     "type" : "boolean",
                     "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "default" : false
+                  },
+                  "finalizationStrategy" : {
+                    "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS",
+                    "type" : "string",
+                    "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove or change the status of resources that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES` or `CHANGE_STATUS`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`.",
+                    "default" : "REMOVE_RESOURCES"
+                  },
+                  "missingAssetStatusId" : {
+                    "type" : "string",
+                    "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for resources that no longer exist in the external system.",
+                    "format" : "uuid"
+                  },
+                  "finalizationParameters" : {
+                    "required" : [ "STATUS_ID" ],
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "required" : [ "STATUS_ID" ],
+                      "type" : "string",
+                      "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
+                      "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json"
+                    },
+                    "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
+                    "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Synchronization finalization job successfully started.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/import/synchronize/{synchronizationId}/json-job" : {
+      "post" : {
+        "tags" : [ "Import" ],
+        "summary" : "Starts full synchronization from the JSON file in job (asynchronously).",
+        "description" : "Starts full synchronization from the JSON file in job (asynchronously).<p>Request can either accept <code>id</code> of the uploaded file that contains JSON input which should be used for import or the file itself. The input file is treated as a full input of synchronization process.</p>",
+        "operationId" : "synchronizeJsonInJob",
+        "parameters" : [ {
+          "name" : "synchronizationId",
+          "in" : "path",
+          "description" : "The synchronization id used to distinguish different synchronizations.",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "sendNotification" : {
+                    "type" : "boolean",
+                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
+                    "default" : false
+                  },
+                  "batchSize" : {
+                    "minimum" : 1,
+                    "type" : "integer",
+                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
+                    "format" : "int32",
+                    "deprecated" : true,
+                    "default" : 1000
+                  },
+                  "simulation" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "saveResult" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "fileId" : {
@@ -1019,6 +1300,11 @@
                     "type" : "boolean",
                     "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
                     "default" : false
+                  },
+                  "missingAssetStatusId" : {
+                    "type" : "string",
+                    "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for resources that no longer exist in the external system.",
+                    "format" : "uuid"
                   }
                 }
               }
@@ -1028,89 +1314,6 @@
         "responses" : {
           "200" : {
             "description" : "Synchronization job successfully started.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Job"
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "basicAuth" : [ ]
-        } ]
-      }
-    },
-    "/import/synchronize/{synchronizationId}/finalize/job" : {
-      "post" : {
-        "tags" : [ "Import" ],
-        "summary" : "Starts synchronization finalization in job (asynchronously).",
-        "description" : "Starts synchronization finalization in job (asynchronously).",
-        "operationId" : "synchronizeFinalizeInJob",
-        "parameters" : [ {
-          "name" : "synchronizationId",
-          "in" : "path",
-          "description" : "The synchronization ID used to distinguish different synchronizations.",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "multipart/form-data" : {
-              "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "sendNotification" : {
-                    "type" : "boolean",
-                    "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>.",
-                    "default" : false
-                  },
-                  "batchSize" : {
-                    "minimum" : 1,
-                    "type" : "integer",
-                    "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
-                    "format" : "int32",
-                    "deprecated": true,
-                    "default" : 1000
-                  },
-                  "simulation" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "saveResult" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "finalizationStrategy" : {
-                    "type" : "string",
-                    "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove or change the status of resources that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES` or `CHANGE_STATUS`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `finalizationParameters`.",
-                    "default" : "REMOVE_RESOURCES"
-                  },
-                  "finalizationParameters" : {
-                    "required" : [ "STATUS_ID" ],
-                    "type" : "object",
-                    "additionalProperties" : {
-                      "required" : [ "STATUS_ID" ],
-                      "type" : "string",
-                      "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.",
-                      "example" : "{ \"STATUS_ID\": \"00000000-0000-0000-0000-000000005066\" };type=application/json"
-                    },
-                    "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.",
-                    "example" : "{ \"STATUS_ID\": \"00000000-0000-0000-0000-000000005066\" };type=application/json"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Synchronization finalization job successfully started.",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1218,6 +1421,12 @@
             "example" : "COMPLETED",
             "enum" : [ "WAITING", "RUNNING", "CANCELING", "COMPLETED", "CANCELED", "ERROR" ]
           },
+          "result" : {
+            "type" : "string",
+            "description" : "The result of the job.",
+            "example" : "SUCCESS",
+            "enum" : [ "NOT_SET", "SUCCESS", "COMPLETED_WITH_ERROR", "FAILURE", "ABORTED" ]
+          },
           "message" : {
             "type" : "string",
             "description" : "The message of the job.",
@@ -1225,486 +1434,6 @@
           }
         },
         "description" : "Represents a job. Job is a single atomic task that is to be performed asynchronously"
-      },
-      "ImportExcelInJobRequest" : {
-        "required" : [ "template" ],
-        "type" : "object",
-        "properties" : {
-          "sendNotification" : {
-            "type" : "boolean",
-            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
-          },
-          "batchSize" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
-            "format" : "int64",
-            "deprecated": true,
-            "default" : 1000
-          },
-          "simulation" : {
-            "type" : "boolean",
-            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "saveResult" : {
-            "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "fileId" : {
-            "type" : "string",
-            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
-            "format" : "uuid"
-          },
-          "file" : {
-            "type" : "string",
-            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
-            "format" : "binary"
-          },
-          "fileName" : {
-            "type" : "string",
-            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
-          },
-          "deleteFile" : {
-            "type" : "boolean",
-            "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
-          },
-          "sheetName" : {
-            "type" : "string",
-            "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the import.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the import."
-          },
-          "sheetIndex" : {
-            "type" : "integer",
-            "description" : "The index of the Excel sheet.\n\n<br/><p>If the index is <code>null</code> and <code>sheetName</code> is <code>null</code>, the first sheet of the workbook will be used for the import.<br/><p>If the index is <code>null</code> and <code>sheetName</code> is not <code>null</code>, the sheet with the name specified by value of <code>sheetName</code> will be used for the import.",
-            "format" : "int32"
-          },
-          "headerRow" : {
-            "type" : "boolean",
-            "description" : "Whether the first row of the imported Excel sheet is the header. <b>The default value</b> is <code>false</code>."
-          },
-          "template" : {
-            "type" : "string",
-            "description" : "The template that should be used for parsing and importing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
-          }
-        },
-        "description" : "The request defining import call properties from an Excel file."
-      },
-      "AssetIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "externalSystemId" : {
-            "type" : "string"
-          },
-          "externalEntityId" : {
-            "type" : "string"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "domain" : {
-            "$ref" : "#/components/schemas/DomainIdentifier"
-          }
-        }
-      },
-      "AssetImportCommand" : {
-        "type" : "object",
-        "properties" : {
-          "identifier" : {
-            "$ref" : "#/components/schemas/AssetIdentifier"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "displayName" : {
-            "type" : "string"
-          },
-          "domain" : {
-            "$ref" : "#/components/schemas/DomainIdentifier"
-          },
-          "type" : {
-            "$ref" : "#/components/schemas/AssetTypeIdentifier"
-          },
-          "status" : {
-            "$ref" : "#/components/schemas/StatusIdentifier"
-          },
-          "attributes" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/AttributeValue"
-              }
-            }
-          },
-          "relations" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/AssetIdentifier"
-              }
-            }
-          },
-          "tags" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "resourceType" : {
-            "type" : "string"
-          }
-        }
-      },
-      "AssetTypeIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "name" : {
-            "type" : "string"
-          }
-        }
-      },
-      "AttributeValue" : {
-        "type" : "object",
-        "properties" : {
-          "value" : {
-            "type" : "string"
-          },
-          "values" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
-      "CommunityIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "externalSystemId" : {
-            "type" : "string"
-          },
-          "externalEntityId" : {
-            "type" : "string"
-          },
-          "name" : {
-            "type" : "string"
-          }
-        }
-      },
-      "CommunityImportCommand" : {
-        "type" : "object",
-        "properties" : {
-          "identifier" : {
-            "$ref" : "#/components/schemas/CommunityIdentifier"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "description" : {
-            "type" : "string"
-          },
-          "language" : {
-            "type" : "string"
-          },
-          "parent" : {
-            "$ref" : "#/components/schemas/CommunityIdentifier"
-          },
-          "resourceType" : {
-            "type" : "string"
-          }
-        }
-      },
-      "ComplexRelationIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "externalSystemId" : {
-            "type" : "string"
-          },
-          "externalEntityId" : {
-            "type" : "string"
-          },
-          "relations" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/AssetIdentifier"
-              }
-            }
-          }
-        }
-      },
-      "ComplexRelationImportCommand" : {
-        "type" : "object",
-        "properties" : {
-          "identifier" : {
-            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
-          },
-          "complexRelationType" : {
-            "$ref" : "#/components/schemas/ComplexRelationTypeIdentifier"
-          },
-          "attributes" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/AttributeValue"
-              }
-            }
-          },
-          "relations" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/AssetIdentifier"
-              }
-            }
-          },
-          "resourceType" : {
-            "type" : "string"
-          }
-        }
-      },
-      "ComplexRelationTypeIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "name" : {
-            "type" : "string"
-          }
-        }
-      },
-      "DomainIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "externalSystemId" : {
-            "type" : "string"
-          },
-          "externalEntityId" : {
-            "type" : "string"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "community" : {
-            "$ref" : "#/components/schemas/CommunityIdentifier"
-          }
-        }
-      },
-      "DomainImportCommand" : {
-        "type" : "object",
-        "properties" : {
-          "identifier" : {
-            "$ref" : "#/components/schemas/DomainIdentifier"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "description" : {
-            "type" : "string"
-          },
-          "community" : {
-            "$ref" : "#/components/schemas/CommunityIdentifier"
-          },
-          "type" : {
-            "$ref" : "#/components/schemas/DomainTypeIdentifier"
-          },
-          "resourceType" : {
-            "type" : "string"
-          }
-        }
-      },
-      "DomainTypeIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "name" : {
-            "type" : "string"
-          }
-        }
-      },
-      "ExternalIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "externalSystemId" : {
-            "type" : "string"
-          },
-          "externalEntityId" : {
-            "type" : "string"
-          }
-        }
-      },
-      "ImportJsonInJobRequest" : {
-        "type" : "object",
-        "properties" : {
-          "sendNotification" : {
-            "type" : "boolean",
-            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
-          },
-          "batchSize" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
-            "format" : "int64",
-            "deprecated": true,
-            "default" : 1000
-          },
-          "simulation" : {
-            "type" : "boolean",
-            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "saveResult" : {
-            "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "fileId" : {
-            "type" : "string",
-            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
-            "format" : "uuid"
-          },
-          "file" : {
-            "type" : "string",
-            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
-            "format" : "binary"
-          },
-          "fileName" : {
-            "type" : "string",
-            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
-          },
-          "deleteFile" : {
-            "type" : "boolean",
-            "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
-          }
-        },
-        "description" : "The request defining import call properties from a JSON file.",
-        "anyOf" : [ {
-          "$ref" : "#/components/schemas/CommunityImportCommand"
-        }, {
-          "$ref" : "#/components/schemas/DomainImportCommand"
-        }, {
-          "$ref" : "#/components/schemas/AssetImportCommand"
-        }, {
-          "$ref" : "#/components/schemas/MappingImportCommand"
-        }, {
-          "$ref" : "#/components/schemas/ComplexRelationImportCommand"
-        } ]
-      },
-      "MappingIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "externalSystemId" : {
-            "type" : "string"
-          },
-          "externalEntityId" : {
-            "type" : "string"
-          },
-          "dgcId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "asset" : {
-            "$ref" : "#/components/schemas/AssetIdentifier"
-          },
-          "domain" : {
-            "$ref" : "#/components/schemas/DomainIdentifier"
-          },
-          "community" : {
-            "$ref" : "#/components/schemas/CommunityIdentifier"
-          },
-          "complexRelation" : {
-            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
-          }
-        }
-      },
-      "MappingImportCommand" : {
-        "type" : "object",
-        "properties" : {
-          "identifier" : {
-            "$ref" : "#/components/schemas/MappingIdentifier"
-          },
-          "externalSystemId" : {
-            "type" : "string"
-          },
-          "externalEntityId" : {
-            "type" : "string"
-          },
-          "dgcId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "asset" : {
-            "$ref" : "#/components/schemas/AssetIdentifier"
-          },
-          "domain" : {
-            "$ref" : "#/components/schemas/DomainIdentifier"
-          },
-          "community" : {
-            "$ref" : "#/components/schemas/CommunityIdentifier"
-          },
-          "complexRelation" : {
-            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
-          },
-          "extEntityUrl" : {
-            "type" : "string"
-          },
-          "lastSyncDate" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "syncAction" : {
-            "type" : "string",
-            "enum" : [ "ADD", "UPDATE", "REMOVE" ]
-          },
-          "description" : {
-            "type" : "string"
-          },
-          "resourceType" : {
-            "type" : "string"
-          }
-        }
-      },
-      "StatusIdentifier" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "name" : {
-            "type" : "string"
-          }
-        }
       },
       "ImportCsvInJobRequest" : {
         "required" : [ "escape", "quote", "separator", "template" ],
@@ -1719,7 +1448,7 @@
             "type" : "integer",
             "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
-            "deprecated": true,
+            "deprecated" : true,
             "default" : 1000
           },
           "simulation" : {
@@ -1729,6 +1458,10 @@
           "saveResult" : {
             "type" : "boolean",
             "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "fileId" : {
             "type" : "string",
@@ -1778,6 +1511,861 @@
           }
         },
         "description" : "The request defining import call properties from a CSV file."
+      },
+      "ImportExcelInJobRequest" : {
+        "required" : [ "template" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
+            "format" : "int64",
+            "deprecated" : true,
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "sheetName" : {
+            "type" : "string",
+            "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the import.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the import."
+          },
+          "sheetIndex" : {
+            "type" : "integer",
+            "description" : "The index of the Excel sheet.\n\n<br/><p>If the index is <code>null</code> and <code>sheetName</code> is <code>null</code>, the first sheet of the workbook will be used for the import.<br/><p>If the index is <code>null</code> and <code>sheetName</code> is not <code>null</code>, the sheet with the name specified by value of <code>sheetName</code> will be used for the import.",
+            "format" : "int32"
+          },
+          "headerRow" : {
+            "type" : "boolean",
+            "description" : "Whether the first row of the imported Excel sheet is the header. <b>The default value</b> is <code>false</code>."
+          },
+          "template" : {
+            "type" : "string",
+            "description" : "The template that should be used for parsing and importing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          }
+        },
+        "description" : "The request defining import call properties from an Excel file."
+      },
+      "AssetIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "domain" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          }
+        }
+      },
+      "AssetImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/AssetIdentifier"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "domain" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/AssetTypeIdentifier"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/StatusIdentifier"
+          },
+          "attributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AttributeValue"
+              }
+            }
+          },
+          "relations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AssetIdentifier"
+              }
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "responsibilities" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Owner"
+              }
+            }
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AssetTypeIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AttributeValue" : {
+        "type" : "object",
+        "properties" : {
+          "value" : {
+            "type" : "string"
+          },
+          "values" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "CommunityIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommunityImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "responsibilities" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Owner"
+              }
+            }
+          },
+          "language" : {
+            "type" : "string"
+          },
+          "parent" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ComplexRelationIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "relations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AssetIdentifier"
+              }
+            }
+          }
+        }
+      },
+      "ComplexRelationImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "complexRelationType" : {
+            "$ref" : "#/components/schemas/ComplexRelationTypeIdentifier"
+          },
+          "attributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AttributeValue"
+              }
+            }
+          },
+          "relations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AssetIdentifier"
+              }
+            }
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ComplexRelationTypeIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DomainIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "community" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          }
+        }
+      },
+      "DomainImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "community" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/DomainTypeIdentifier"
+          },
+          "responsibilities" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Owner"
+              }
+            }
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DomainTypeIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ExternalIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ImportJsonInJobRequest" : {
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
+            "format" : "int64",
+            "deprecated" : true,
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+          },
+          "fileId" : {
+            "type" : "string",
+            "description" : "The <code>id</code> of uploaded file.<p><b>NOTE:</b> if this field is used, <code>file</code> should not be set.",
+            "format" : "uuid"
+          },
+          "file" : {
+            "type" : "string",
+            "description" : "The file to upload. If set, then also <code>fileName</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set.",
+            "format" : "binary"
+          },
+          "fileName" : {
+            "type" : "string",
+            "description" : "The name of the file to upload. If set, then also <code>file</code> should be provided.<p><b>NOTE:</b> if this field is used, <code>fileId</code> should not be set."
+          },
+          "deleteFile" : {
+            "type" : "boolean",
+            "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "relationsAction" : {
+            "pattern" : "ADD_OR_IGNORE|REPLACE",
+            "type" : "string"
+          }
+        },
+        "description" : "The request defining import call properties from a JSON file.",
+        "anyOf" : [ {
+          "$ref" : "#/components/schemas/CommunityImportCommand"
+        }, {
+          "$ref" : "#/components/schemas/DomainImportCommand"
+        }, {
+          "$ref" : "#/components/schemas/AssetImportCommand"
+        }, {
+          "$ref" : "#/components/schemas/MappingImportCommand"
+        }, {
+          "$ref" : "#/components/schemas/ComplexRelationImportCommand"
+        } ]
+      },
+      "MappingIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "dgcId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "asset" : {
+            "$ref" : "#/components/schemas/AssetIdentifier"
+          },
+          "domain" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          },
+          "community" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "complexRelation" : {
+            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
+          }
+        }
+      },
+      "MappingImportCommand" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "$ref" : "#/components/schemas/MappingIdentifier"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "externalSystemId" : {
+            "type" : "string"
+          },
+          "externalEntityId" : {
+            "type" : "string"
+          },
+          "dgcId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "asset" : {
+            "$ref" : "#/components/schemas/AssetIdentifier"
+          },
+          "domain" : {
+            "$ref" : "#/components/schemas/DomainIdentifier"
+          },
+          "community" : {
+            "$ref" : "#/components/schemas/CommunityIdentifier"
+          },
+          "complexRelation" : {
+            "$ref" : "#/components/schemas/ComplexRelationIdentifier"
+          },
+          "extEntityUrl" : {
+            "type" : "string"
+          },
+          "lastSyncDate" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "syncAction" : {
+            "type" : "string",
+            "enum" : [ "ADD", "UPDATE", "REMOVE" ]
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "resourceType" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Owner" : {
+        "type" : "object",
+        "properties" : {
+          "user" : {
+            "$ref" : "#/components/schemas/UserIdentifier"
+          },
+          "userGroup" : {
+            "$ref" : "#/components/schemas/UserGroupIdentifier"
+          }
+        }
+      },
+      "StatusIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UserGroupIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }
+      },
+      "UserIdentifier" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "indexes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }
+      },
+      "ImportCommandReference" : {
+        "type" : "object",
+        "properties" : {
+          "indices" : {
+            "type" : "array",
+            "description" : "Indices of the import command in the input file.",
+            "items" : {
+              "type" : "integer",
+              "description" : "Indices of the import command in the input file.",
+              "format" : "int32"
+            }
+          },
+          "identifier" : {
+            "type" : "string",
+            "description" : "Import command identifier."
+          }
+        },
+        "description" : "A reference to the import command."
+      },
+      "ImportError" : {
+        "type" : "object",
+        "properties" : {
+          "errorType" : {
+            "type" : "string",
+            "description" : "Import error type.",
+            "enum" : [ "VALIDATION", "RUNTIME" ]
+          },
+          "resourceType" : {
+            "type" : "string",
+            "description" : "Import resource type.",
+            "enum" : [ "COMMUNITY", "DOMAIN", "ASSET", "ATTRIBUTE", "RELATION", "COMPLEX_RELATION", "MAPPING", "RESPONSIBILITY" ]
+          },
+          "errorMessage" : {
+            "type" : "string",
+            "description" : "User friendly error message."
+          },
+          "command" : {
+            "$ref" : "#/components/schemas/ImportCommandReference"
+          }
+        },
+        "description" : "Import job error."
+      },
+      "ImportErrorPagedResponse" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "The total number of results.",
+            "format" : "int64",
+            "example" : 1000
+          },
+          "offset" : {
+            "type" : "integer",
+            "description" : "The offset for the results.",
+            "format" : "int64",
+            "example" : 10
+          },
+          "limit" : {
+            "type" : "integer",
+            "description" : "The maximum number of results to be returned.",
+            "format" : "int64",
+            "example" : 100
+          },
+          "results" : {
+            "type" : "array",
+            "description" : "The list of results.",
+            "items" : {
+              "$ref" : "#/components/schemas/ImportError"
+            }
+          }
+        }
+      },
+      "PagedResponseImportError" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "The total number of results.",
+            "format" : "int64",
+            "example" : 1000
+          },
+          "offset" : {
+            "type" : "integer",
+            "description" : "The offset for the results.",
+            "format" : "int64",
+            "example" : 10
+          },
+          "limit" : {
+            "type" : "integer",
+            "description" : "The maximum number of results to be returned.",
+            "format" : "int64",
+            "example" : 100
+          },
+          "results" : {
+            "type" : "array",
+            "description" : "The list of results.",
+            "items" : {
+              "$ref" : "#/components/schemas/ImportError"
+            }
+          }
+        },
+        "description" : "Response containing the paged information."
+      },
+      "CategoryReference" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The <code>ID</code> of the category.",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the category."
+          }
+        },
+        "description" : "The category reference, for example AssetType or AttributeType."
+      },
+      "ImportCounters" : {
+        "type" : "object",
+        "properties" : {
+          "added" : {
+            "type" : "integer",
+            "description" : "The number of added resources.",
+            "format" : "int32"
+          },
+          "removed" : {
+            "type" : "integer",
+            "description" : "The number of removed resources.",
+            "format" : "int32"
+          },
+          "updated" : {
+            "type" : "integer",
+            "description" : "The number of updated resources.",
+            "format" : "int32"
+          }
+        },
+        "description" : "The number of added/removed/updated resources."
+      },
+      "ImportSummary" : {
+        "type" : "object",
+        "properties" : {
+          "resourceTypes" : {
+            "type" : "array",
+            "description" : "A list of the resource type import summary.",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTypeSummary"
+            }
+          },
+          "errorsCount" : {
+            "type" : "integer",
+            "description" : "The total number of errors the occurred during the import.",
+            "format" : "int32"
+          },
+          "importJobState" : {
+            "type" : "string",
+            "description" : "Import job state.",
+            "enum" : [ "COMPLETED", "FAILED", "COMPLETED_WITH_ERRORS", "ABORTED" ]
+          }
+        },
+        "description" : "Represents a summary report of the import job results."
+      },
+      "ResourceTypeSummary" : {
+        "type" : "object",
+        "properties" : {
+          "resourceType" : {
+            "type" : "string",
+            "description" : "Import resource type.",
+            "enum" : [ "COMMUNITY", "DOMAIN", "ASSET", "ATTRIBUTE", "RELATION", "COMPLEX_RELATION", "MAPPING", "RESPONSIBILITY" ]
+          },
+          "counters" : {
+            "$ref" : "#/components/schemas/ImportCounters"
+          },
+          "subcategories" : {
+            "type" : "array",
+            "description" : "A detailed summary of the number of resources that have been affected by the import job. This can be empty for some resource types, f.e. <code>Mapping</code>.",
+            "items" : {
+              "$ref" : "#/components/schemas/SubcategorySummary"
+            }
+          }
+        },
+        "description" : "An import summary results for a particular resource type."
+      },
+      "SubcategorySummary" : {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "$ref" : "#/components/schemas/CategoryReference"
+          },
+          "counters" : {
+            "$ref" : "#/components/schemas/ImportCounters"
+          }
+        },
+        "description" : "An import summary results for a particular resource category."
       },
       "PagedResponseSynchronizationInfo" : {
         "type" : "object",
@@ -1831,6 +2419,10 @@
           "limit" : {
             "type" : "integer",
             "format" : "int32"
+          },
+          "countLimit" : {
+            "type" : "integer",
+            "format" : "int32"
           }
         },
         "description" : "The search criteria for synchronization information.\nOnly parameters that are specified in this request and have not <code>null</code> values are used for filtering.\nAll other parameters are ignored.\nThe returned synchronization information satisfy all constraints that are specified in this search criteria.\nBy default a result containing 1000 synchronization infos is returned."
@@ -1848,7 +2440,7 @@
             "type" : "integer",
             "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
-            "deprecated": true,
+            "deprecated" : true,
             "default" : 1000
           },
           "simulation" : {
@@ -1858,6 +2450,10 @@
           "saveResult" : {
             "type" : "boolean",
             "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -1926,7 +2522,7 @@
             "type" : "integer",
             "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
-            "deprecated": true,
+            "deprecated" : true,
             "default" : 1000
           },
           "simulation" : {
@@ -1936,6 +2532,10 @@
           "saveResult" : {
             "type" : "boolean",
             "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -1993,7 +2593,7 @@
             "type" : "integer",
             "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
-            "deprecated": true,
+            "deprecated" : true,
             "default" : 1000
           },
           "simulation" : {
@@ -2003,6 +2603,10 @@
           "saveResult" : {
             "type" : "boolean",
             "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2047,7 +2651,7 @@
             "type" : "integer",
             "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
-            "deprecated": true,
+            "deprecated" : true,
             "default" : 1000
           },
           "simulation" : {
@@ -2057,6 +2661,10 @@
           "saveResult" : {
             "type" : "boolean",
             "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2125,7 +2733,7 @@
             "type" : "integer",
             "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
-            "deprecated": true,
+            "deprecated" : true,
             "default" : 1000
           },
           "simulation" : {
@@ -2135,6 +2743,10 @@
           "saveResult" : {
             "type" : "boolean",
             "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2179,6 +2791,64 @@
         },
         "description" : "The request defining synchronization call properties from a Excel file."
       },
+      "SynchronizationFinalizationRequest" : {
+        "required" : [ "synchronizationId" ],
+        "type" : "object",
+        "properties" : {
+          "sendNotification" : {
+            "type" : "boolean",
+            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
+          },
+          "batchSize" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
+            "format" : "int64",
+            "deprecated" : true,
+            "default" : 1000
+          },
+          "simulation" : {
+            "type" : "boolean",
+            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "saveResult" : {
+            "type" : "boolean",
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+          },
+          "synchronizationId" : {
+            "maxLength" : 50,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "finalizationStrategy" : {
+            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS",
+            "type" : "string",
+            "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove or change the status of resources that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES` or `CHANGE_STATUS`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`."
+          },
+          "missingAssetStatusId" : {
+            "type" : "string",
+            "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for resources that no longer exist in the external system.",
+            "format" : "uuid"
+          },
+          "finalizationParameters" : {
+            "required" : [ "STATUS_ID" ],
+            "type" : "object",
+            "additionalProperties" : {
+              "required" : [ "STATUS_ID" ],
+              "type" : "string",
+              "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
+              "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json"
+            },
+            "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
+            "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json"
+          }
+        },
+        "description" : "The request defining synchronization finalization call properties."
+      },
       "SynchronizationJsonInJobRequest" : {
         "required" : [ "synchronizationId" ],
         "type" : "object",
@@ -2192,7 +2862,7 @@
             "type" : "integer",
             "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
             "format" : "int64",
-            "deprecated": true,
+            "deprecated" : true,
             "default" : 1000
           },
           "simulation" : {
@@ -2202,6 +2872,10 @@
           "saveResult" : {
             "type" : "boolean",
             "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2236,61 +2910,17 @@
               "type" : "string"
             }
           },
+          "missingAssetStatusId" : {
+            "type" : "string",
+            "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for resources that no longer exist in the external system.",
+            "format" : "uuid"
+          },
           "relationsAction" : {
             "pattern" : "ADD_OR_IGNORE|REPLACE",
             "type" : "string"
           }
         },
         "description" : "The request defining synchronization call properties from a JSON file."
-      },
-      "SynchronizationFinalizationRequest" : {
-        "required" : [ "synchronizationId" ],
-        "type" : "object",
-        "properties" : {
-          "sendNotification" : {
-            "type" : "boolean",
-            "description" : "Whether job status notification should be sent. <b>The default value</b> is <code>false</code>."
-          },
-          "batchSize" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "description" : "<i>The batchSize parameter is now deprecated and is ignored during command execution.</i>",
-            "format" : "int64",
-            "deprecated": true,
-            "default" : 1000
-          },
-          "simulation" : {
-            "type" : "boolean",
-            "description" : "Whether the import should be triggered as a simulation. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "saveResult" : {
-            "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "synchronizationId" : {
-            "maxLength" : 50,
-            "minLength" : 1,
-            "type" : "string"
-          },
-          "finalizationStrategy" : {
-            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS",
-            "type" : "string",
-            "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove or change the status of resources that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES` or `CHANGE_STATUS`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `finalizationParameters`."
-          },
-          "finalizationParameters" : {
-            "required" : [ "STATUS_ID" ],
-            "type" : "object",
-            "additionalProperties" : {
-              "required" : [ "STATUS_ID" ],
-              "type" : "string",
-              "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.",
-              "example" : "{ \"STATUS_ID\": \"00000000-0000-0000-0000-000000005066\" };type=application/json"
-            },
-            "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.",
-            "example" : "{ \"STATUS_ID\": \"00000000-0000-0000-0000-000000005066\" };type=application/json"
-          }
-        },
-        "description" : "The request defining synchronization finalization call properties."
       }
     },
     "securitySchemes" : {

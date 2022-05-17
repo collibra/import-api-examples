@@ -40,7 +40,7 @@ public final class ImporterApi {
 	}
 
 	public PagedResponseSynchronizationInfo findSynchronizationInfos(FindSynchronizationRequest request) {
-		return importApi.findSynchronizationInfos(request.getOffset(), request.getLimit());
+		return importApi.findSynchronizationInfos(request.getOffset(), request.getLimit(), request.getCountLimit());
 	}
 
 	public Job importCsvInJob(ImportCsvInJobRequest request) {
@@ -53,6 +53,7 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
@@ -68,10 +69,12 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
-				request.getDeleteFile());
+				request.getDeleteFile(),
+				request.getRelationsAction());
 	}
 
 	public Job importExcelInJob(ImportExcelInJobRequest request) {
@@ -81,6 +84,7 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
@@ -105,6 +109,7 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
@@ -122,6 +127,7 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
@@ -138,10 +144,12 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
-				request.getDeleteFile());
+				request.getDeleteFile(),
+				request.getRelationsAction());
 	}
 
 	public Job synchronizeCsvInJob(SynchronizationCsvInJobRequest request) {
@@ -155,6 +163,7 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
@@ -172,6 +181,7 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
@@ -188,7 +198,9 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getFinalizationStrategy());
+				request.getContinueOnError(),
+				request.getFinalizationStrategy(),
+				request.getMissingAssetStatusId());
 	}
 
 	public Job synchronizeJsonInJob(SynchronizationJsonInJobRequest request) {
@@ -198,9 +210,11 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
+				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
-				request.getDeleteFile());
+				request.getDeleteFile(),
+				request.getMissingAssetStatusId());
 	}
 }
