@@ -53,11 +53,11 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
 				request.getStrictQuotes(),
 				request.getIgnoreLeadingWhitespace(),
 				request.getHeaderRow());
@@ -69,11 +69,11 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
 				request.getRelationsAction());
 	}
 
@@ -84,11 +84,11 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
 				request.getSheetName(),
 				request.getSheetIndex(),
 				request.getHeaderRow());
@@ -109,11 +109,11 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
 				request.getStrictQuotes(),
 				request.getIgnoreLeadingWhitespace(),
 				request.getHeaderRow());
@@ -127,11 +127,11 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
 				request.getSheetName(),
 				request.getSheetIndex(),
 				request.getHeaderRow());
@@ -144,11 +144,11 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
 				request.getRelationsAction());
 	}
 
@@ -163,14 +163,16 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
 				request.getStrictQuotes(),
 				request.getIgnoreLeadingWhitespace(),
-				request.getHeaderRow());
+				request.getHeaderRow(),
+				request.getFinalizationStrategy(),
+				request.getMissingAssetStatusId());
 	}
 
 	public Job synchronizeExcelInJob(SynchronizationExcelInJobRequest request) {
@@ -181,14 +183,16 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
 				request.getSheetName(),
 				request.getSheetIndex(),
-				request.getHeaderRow());
+				request.getHeaderRow(),
+				request.getFinalizationStrategy(),
+				request.getMissingAssetStatusId());
 	}
 
 	public Job synchronizeFinalizeInJob(SynchronizationFinalizationRequest request) {
@@ -198,7 +202,6 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFinalizationStrategy(),
 				request.getMissingAssetStatusId());
 	}
@@ -210,11 +213,12 @@ public final class ImporterApi {
 				Optional.ofNullable(request.getBatchSize()).map(Long::intValue).orElse(null),
 				request.getSimulation(),
 				request.getSaveResult(),
-				request.getContinueOnError(),
 				request.getFileId(),
 				request.getFile(),
 				request.getFileName(),
 				request.getDeleteFile(),
+				request.getContinueOnError(),
+				request.getFinalizationStrategy(),
 				request.getMissingAssetStatusId());
 	}
 }

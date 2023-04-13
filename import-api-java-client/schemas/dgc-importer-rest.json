@@ -51,12 +51,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -77,6 +73,11 @@
                   "deleteFile" : {
                     "type" : "boolean",
                     "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "separator" : {
@@ -168,12 +169,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -194,6 +191,11 @@
                   "deleteFile" : {
                     "type" : "boolean",
                     "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "sheetName" : {
@@ -268,12 +270,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -296,10 +294,15 @@
                     "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
                     "default" : false
                   },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "default" : false
+                  },
                   "relationsAction" : {
                     "pattern" : "ADD_OR_IGNORE|REPLACE",
                     "type" : "string",
-                    "description" : "Should it replace existing relations or add/update if any during refresh"
+                    "description" : "Should it replace existing relations or add/update if any during refresh. Possible values are: <b>ADD_OR_IGNORE</b> and <b>REPLACE</b>."
                   }
                 }
               }
@@ -326,8 +329,8 @@
     "/import/results/{jobId}/errors" : {
       "get" : {
         "tags" : [ "Import Results" ],
-        "summary" : "List the errors of a finished import job.",
-        "description" : "Returns import errors of a finished import job identified by given <code>jobId</code>. By default a result containing 1000 errors is returned.",
+        "summary" : "List the errors of a finished import job",
+        "description" : "Returns a list of errors of a finished import job with the specified ID. By default the maximum number of results is limited to 1000.",
         "operationId" : "findImportErrors",
         "parameters" : [ {
           "name" : "jobId",
@@ -350,7 +353,7 @@
         }, {
           "name" : "limit",
           "in" : "query",
-          "description" : "The maximum number of results to retrieve. If not set (limit = <code>0</code>), the default limit will be used.",
+          "description" : "The maximum number of results to retrieve. If not set (limit = <code>0</code>), the default limit will be used. The maximum allowed limit is 1000.",
           "schema" : {
             "type" : "integer",
             "format" : "int32",
@@ -392,8 +395,8 @@
     "/import/results/{jobId}/summary" : {
       "get" : {
         "tags" : [ "Import Results" ],
-        "summary" : "Retrieve a summary of a finished import job.",
-        "description" : "Retrieve a summary of a finished import job.",
+        "summary" : "Retrieve a summary of a finished import job",
+        "description" : "Returns details about a finished import job with the specified ID such as the total number of resources and types of resources that were added, removed or updated and the number of errors.",
         "operationId" : "getImportJobSummary",
         "parameters" : [ {
           "name" : "jobId",
@@ -503,7 +506,7 @@
         }, {
           "name" : "limit",
           "in" : "query",
-          "description" : "The maximum number of results to retrieve. If not set (limit = <code>0</code>), the default limit will be used.",
+          "description" : "The maximum number of results to retrieve. If not set (limit = <code>0</code>), the default limit will be used. The maximum allowed limit is 1000.",
           "schema" : {
             "type" : "integer",
             "format" : "int32",
@@ -605,12 +608,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -631,6 +630,11 @@
                   "deleteFile" : {
                     "type" : "boolean",
                     "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "separator" : {
@@ -733,12 +737,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -759,6 +759,11 @@
                   "deleteFile" : {
                     "type" : "boolean",
                     "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "sheetName" : {
@@ -843,12 +848,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -871,10 +872,15 @@
                     "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
                     "default" : false
                   },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "default" : false
+                  },
                   "relationsAction" : {
                     "pattern" : "ADD_OR_IGNORE|REPLACE",
                     "type" : "string",
-                    "description" : "Should it replace existing relations or add/update if any during refresh"
+                    "description" : "Should it replace existing relations or add/update if any during refresh. Possible values are: <b>ADD_OR_IGNORE</b> and <b>REPLACE</b>."
                   }
                 }
               }
@@ -942,12 +948,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -968,6 +970,11 @@
                   "deleteFile" : {
                     "type" : "boolean",
                     "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
+                    "default" : false
+                  },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
                     "default" : false
                   },
                   "separator" : {
@@ -1000,6 +1007,17 @@
                   "template" : {
                     "type" : "string",
                     "description" : "The template that should be used for parsing and synchronizing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  },
+                  "finalizationStrategy" : {
+                    "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS|IGNORE",
+                    "type" : "string",
+                    "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove, ignore or change the status of assets that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES`, `CHANGE_STATUS` and `IGNORE`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`.",
+                    "default" : "REMOVE_RESOURCES"
+                  },
+                  "missingAssetStatusId" : {
+                    "type" : "string",
+                    "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for assets that no longer exist in the external system.",
+                    "format" : "uuid"
                   }
                 }
               }
@@ -1067,12 +1085,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -1095,6 +1109,11 @@
                     "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
                     "default" : false
                   },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "default" : false
+                  },
                   "sheetName" : {
                     "type" : "string",
                     "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the synchronization."
@@ -1111,6 +1130,17 @@
                   "template" : {
                     "type" : "string",
                     "description" : "The template that should be used for parsing and synchronizing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+                  },
+                  "finalizationStrategy" : {
+                    "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS|IGNORE",
+                    "type" : "string",
+                    "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove, ignore or change the status of assets that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES`, `CHANGE_STATUS` and `IGNORE`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`.",
+                    "default" : "REMOVE_RESOURCES"
+                  },
+                  "missingAssetStatusId" : {
+                    "type" : "string",
+                    "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for assets that no longer exist in the external system.",
+                    "format" : "uuid"
                   }
                 }
               }
@@ -1177,23 +1207,19 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "finalizationStrategy" : {
-                    "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS",
+                    "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS|IGNORE",
                     "type" : "string",
-                    "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove or change the status of resources that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES` or `CHANGE_STATUS`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`.",
+                    "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove, ignore or change the status of assets that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES`, `CHANGE_STATUS` and `IGNORE`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`.",
                     "default" : "REMOVE_RESOURCES"
                   },
                   "missingAssetStatusId" : {
                     "type" : "string",
-                    "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for resources that no longer exist in the external system.",
+                    "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for assets that no longer exist in the external system.",
                     "format" : "uuid"
                   },
                   "finalizationParameters" : {
@@ -1202,11 +1228,13 @@
                     "additionalProperties" : {
                       "required" : [ "STATUS_ID" ],
                       "type" : "string",
-                      "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
-                      "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json"
+                      "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the assets that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
+                      "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json",
+                      "deprecated" : true
                     },
-                    "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
-                    "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json"
+                    "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the assets that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
+                    "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json",
+                    "deprecated" : true
                   }
                 }
               }
@@ -1273,12 +1301,8 @@
                   },
                   "saveResult" : {
                     "type" : "boolean",
-                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.",
-                    "default" : false
-                  },
-                  "continueOnError" : {
-                    "type" : "boolean",
-                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+                    "deprecated" : true,
                     "default" : false
                   },
                   "fileId" : {
@@ -1301,9 +1325,20 @@
                     "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted.",
                     "default" : false
                   },
+                  "continueOnError" : {
+                    "type" : "boolean",
+                    "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored.",
+                    "default" : false
+                  },
+                  "finalizationStrategy" : {
+                    "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS|IGNORE",
+                    "type" : "string",
+                    "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove, ignore or change the status of assets that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES`, `CHANGE_STATUS` and `IGNORE`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`.",
+                    "default" : "REMOVE_RESOURCES"
+                  },
                   "missingAssetStatusId" : {
                     "type" : "string",
-                    "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for resources that no longer exist in the external system.",
+                    "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for assets that no longer exist in the external system.",
                     "format" : "uuid"
                   }
                 }
@@ -1457,11 +1492,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "fileId" : {
             "type" : "string",
@@ -1480,6 +1512,10 @@
           "deleteFile" : {
             "type" : "boolean",
             "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "separator" : {
             "type" : "string",
@@ -1534,11 +1570,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "fileId" : {
             "type" : "string",
@@ -1557,6 +1590,10 @@
           "deleteFile" : {
             "type" : "boolean",
             "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "sheetName" : {
             "type" : "string",
@@ -1619,6 +1656,15 @@
               "format" : "int32"
             }
           },
+          "responsibilities" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Owner"
+              }
+            }
+          },
           "name" : {
             "type" : "string"
           },
@@ -1656,15 +1702,6 @@
             "type" : "array",
             "items" : {
               "type" : "string"
-            }
-          },
-          "responsibilities" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/Owner"
-              }
             }
           },
           "resourceType" : {
@@ -1743,12 +1780,6 @@
               "format" : "int32"
             }
           },
-          "name" : {
-            "type" : "string"
-          },
-          "description" : {
-            "type" : "string"
-          },
           "responsibilities" : {
             "type" : "object",
             "additionalProperties" : {
@@ -1757,6 +1788,12 @@
                 "$ref" : "#/components/schemas/Owner"
               }
             }
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
           },
           "language" : {
             "type" : "string"
@@ -1899,6 +1936,15 @@
               "format" : "int32"
             }
           },
+          "responsibilities" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Owner"
+              }
+            }
+          },
           "name" : {
             "type" : "string"
           },
@@ -1910,15 +1956,6 @@
           },
           "type" : {
             "$ref" : "#/components/schemas/DomainTypeIdentifier"
-          },
-          "responsibilities" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/Owner"
-              }
-            }
           },
           "resourceType" : {
             "type" : "string"
@@ -1976,11 +2013,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "fileId" : {
             "type" : "string",
@@ -1999,6 +2033,10 @@
           "deleteFile" : {
             "type" : "boolean",
             "description" : "Delete the file from the Collibra Platform if the import / synchronization job is successful. <b>The default value</b> is <code>false</code><p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "relationsAction" : {
             "pattern" : "ADD_OR_IGNORE|REPLACE",
@@ -2177,10 +2215,10 @@
         "properties" : {
           "indices" : {
             "type" : "array",
-            "description" : "Indices of the import command in the input file.",
+            "description" : "A list of indices of the import command in the input file.",
             "items" : {
               "type" : "integer",
-              "description" : "Indices of the import command in the input file.",
+              "description" : "A list of indices of the import command in the input file.",
               "format" : "int32"
             }
           },
@@ -2288,7 +2326,7 @@
             "description" : "The name of the category."
           }
         },
-        "description" : "The category reference, for example AssetType or AttributeType."
+        "description" : "A reference to the type of resource, for example Physical Data Dictionary or Business Term."
       },
       "ImportCounters" : {
         "type" : "object",
@@ -2309,7 +2347,7 @@
             "format" : "int32"
           }
         },
-        "description" : "The number of added/removed/updated resources."
+        "description" : "The number of added, removed or updated resources."
       },
       "ImportSummary" : {
         "type" : "object",
@@ -2332,7 +2370,7 @@
             "enum" : [ "COMPLETED", "FAILED", "COMPLETED_WITH_ERRORS", "ABORTED" ]
           }
         },
-        "description" : "Represents a summary report of the import job results."
+        "description" : "A summary of the import."
       },
       "ResourceTypeSummary" : {
         "type" : "object",
@@ -2353,7 +2391,7 @@
             }
           }
         },
-        "description" : "An import summary results for a particular resource type."
+        "description" : "A summary of the import for a particular resource, for example Community, Domain or Asset."
       },
       "SubcategorySummary" : {
         "type" : "object",
@@ -2365,7 +2403,7 @@
             "$ref" : "#/components/schemas/ImportCounters"
           }
         },
-        "description" : "An import summary results for a particular resource category."
+        "description" : "A summary of the import for a particular type of resource, for example Physical Data Dictionary or Business Term."
       },
       "PagedResponseSynchronizationInfo" : {
         "type" : "object",
@@ -2449,11 +2487,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2477,6 +2512,10 @@
           "deleteFile" : {
             "type" : "boolean",
             "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "separator" : {
             "type" : "string",
@@ -2531,11 +2570,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2559,6 +2595,10 @@
           "deleteFile" : {
             "type" : "boolean",
             "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "sheetName" : {
             "type" : "string",
@@ -2602,11 +2642,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2630,6 +2667,10 @@
           "deleteFile" : {
             "type" : "boolean",
             "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "relationsAction" : {
             "pattern" : "ADD_OR_IGNORE|REPLACE",
@@ -2660,11 +2701,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2688,6 +2726,10 @@
           "deleteFile" : {
             "type" : "boolean",
             "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
+          },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
           },
           "separator" : {
             "type" : "string",
@@ -2716,6 +2758,22 @@
           "template" : {
             "type" : "string",
             "description" : "The template that should be used for parsing and synchronizing the contents of the CSV file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the CSV file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          },
+          "finalizationStrategy" : {
+            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS|IGNORE",
+            "type" : "string",
+            "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove, ignore or change the status of assets that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES`, `CHANGE_STATUS` and `IGNORE`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`."
+          },
+          "finalizationParameters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "missingAssetStatusId" : {
+            "type" : "string",
+            "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for assets that no longer exist in the external system.",
+            "format" : "uuid"
           }
         },
         "description" : "The request defining synchronization call properties from a CSV file."
@@ -2742,11 +2800,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2771,6 +2826,10 @@
             "type" : "boolean",
             "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
           },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+          },
           "sheetName" : {
             "type" : "string",
             "description" : "The name of the Excel sheet.\n\n<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is <code>null</code>, the first sheet of the workbook will be used for the synchronization.<br/><p>If the name is <code>null</code> and <code>sheetIndex</code> is not <code>null</code>, the sheet with the index specified by value of <code>sheetIndex</code> will be used for the synchronization."
@@ -2787,6 +2846,22 @@
           "template" : {
             "type" : "string",
             "description" : "The template that should be used for parsing and synchronizing the contents of the Excel file.\n\n<br/><p>There is one placeholder currently supported:<ul>     <li><b>${x}</b> - refers to the n-th column in the Excel file, e.g. ${1}, ${2}, ...)</li></ul><p>Example of a correct JSON template:</p>\n<pre>\n[\n  {\n    \"resourceType\": \"Asset\",\n    \"identifier\": {\n      \"name\": \"${1}\",\n      \"domain\": {\n        \"name\": \"${2}\",\n        \"community\": {\n          \"name\": \"Some Community\"\n        }\n      }\n    },\n    \"attributes\" : {\n      \"00000000-0000-0000-0000-000000003115\" : [ {\n        \"value\" : \"${3}\" \n      } ],\n      \"00000000-0000-0000-0000-000000000222\" : [ {\n        \"value\" : \"${4}\"\n      } ]\n    }\n  }\n]\n</pre>"
+          },
+          "finalizationStrategy" : {
+            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS|IGNORE",
+            "type" : "string",
+            "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove, ignore or change the status of assets that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES`, `CHANGE_STATUS` and `IGNORE`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`."
+          },
+          "finalizationParameters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "missingAssetStatusId" : {
+            "type" : "string",
+            "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for assets that no longer exist in the external system.",
+            "format" : "uuid"
           }
         },
         "description" : "The request defining synchronization call properties from a Excel file."
@@ -2813,11 +2888,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2825,13 +2897,13 @@
             "type" : "string"
           },
           "finalizationStrategy" : {
-            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS",
+            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS|IGNORE",
             "type" : "string",
-            "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove or change the status of resources that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES` or `CHANGE_STATUS`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`."
+            "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove, ignore or change the status of assets that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES`, `CHANGE_STATUS` and `IGNORE`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`."
           },
           "missingAssetStatusId" : {
             "type" : "string",
-            "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for resources that no longer exist in the external system.",
+            "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for assets that no longer exist in the external system.",
             "format" : "uuid"
           },
           "finalizationParameters" : {
@@ -2840,11 +2912,13 @@
             "additionalProperties" : {
               "required" : [ "STATUS_ID" ],
               "type" : "string",
-              "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
-              "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json"
+              "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the assets that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
+              "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json",
+              "deprecated" : true
             },
-            "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the resources that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
-            "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json"
+            "description" : "If you have set `finalizationStrategy` to `CHANGE_STATUS`, the status ID for the assets that no longer exist in the external system.<p><b>NOTE:</b> This parameter must be declared with an 'application/json' content type.<p><b>DEPRECATED:</b> This parameter is deprecated and will be removed in the future. Please, use </b>missingAssetStatusId</b>.",
+            "example" : "{ \\\"STATUS_ID\\\": \\\"00000000-0000-0000-0000-000000005066\\\" };type=application/json",
+            "deprecated" : true
           }
         },
         "description" : "The request defining synchronization finalization call properties."
@@ -2871,11 +2945,8 @@
           },
           "saveResult" : {
             "type" : "boolean",
-            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC."
-          },
-          "continueOnError" : {
-            "type" : "boolean",
-            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+            "description" : "Whether the import Result should be persisted or forgotten. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the result of the import simulation will be available at the end of the job but no change will be applied to the DGC.<p><b>DEPRECATED:</b>This parameter is deprecated and will be removed in the future.</b>.",
+            "deprecated" : true
           },
           "synchronizationId" : {
             "maxLength" : 50,
@@ -2900,9 +2971,14 @@
             "type" : "boolean",
             "description" : "Whether the file should be deleted after the synchronization job is finished, regardless of the result. <b>The default value</b> is <code>false</code>.<p><b>NOTE:</b> if the file corresponds to an attachment, the attachment will be deleted."
           },
+          "continueOnError" : {
+            "type" : "boolean",
+            "description" : "Whether the import should continue if some of the import commands are invalid or failed to execute. <b>The default value</b> is <code>false</code>.<p>If <code>true</code>, the valid commands are still committed to the database, which can lead to partial results being stored."
+          },
           "finalizationStrategy" : {
-            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS",
-            "type" : "string"
+            "pattern" : "REMOVE_RESOURCES|CHANGE_STATUS|IGNORE",
+            "type" : "string",
+            "description" : "The synchronization finalization strategy used in the clean up action. This determines whether to remove, ignore or change the status of assets that no longer exist in the external system.<br />Possible values are `REMOVE_RESOURCES`, `CHANGE_STATUS` and `IGNORE`.<br />When you select `CHANGE_STATUS`, you must also provide a value for `missingAssetStatusId`."
           },
           "finalizationParameters" : {
             "type" : "object",
@@ -2912,7 +2988,7 @@
           },
           "missingAssetStatusId" : {
             "type" : "string",
-            "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for resources that no longer exist in the external system.",
+            "description" : "If <b>finalizationStrategy</b> is set to `CHANGE_STATUS` then this parameter determines the new status ID for assets that no longer exist in the external system.",
             "format" : "uuid"
           },
           "relationsAction" : {
