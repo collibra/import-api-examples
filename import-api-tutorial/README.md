@@ -43,6 +43,7 @@ This module has the following classes and resources:
   refresh. Contains 2 assets.
 - [Demo5_SynchronizeBatch2.json](src/main/resources/Demo5_SynchronizeBatch2.json) - Batch2 resources for Synchronization
   Refresh. Contains 2 assets.
+- [Import_API.postman_collection.json](src/main/resources/Import_API.postman_collection.json) - Postman collection for Import API.
 
 ## Collibra developer terms
 

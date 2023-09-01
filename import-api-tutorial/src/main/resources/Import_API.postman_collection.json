@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "4523f913-a5ec-41ea-bc9e-5e1cc223ae08",
+		"name": "Import API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10497155"
+	},
+	"item": [
+		{
+			"name": "Importing data from JSON file",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "fileName",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{dgc_url}}{{rest_endpoint}}/import/json-job",
+					"host": [
+						"{{dgc_url}}{{rest_endpoint}}"
+					],
+					"path": [
+						"import",
+						"json-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Importing data from CSV file",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "fileName",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "template",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{dgc_url}}{{rest_endpoint}}/import/csv-job",
+					"host": [
+						"{{dgc_url}}{{rest_endpoint}}"
+					],
+					"path": [
+						"import",
+						"csv-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Importing data from Excel file",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "fileName",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{dgc_url}}{{rest_endpoint}}/import/excel-job",
+					"host": [
+						"{{dgc_url}}{{rest_endpoint}}"
+					],
+					"path": [
+						"import",
+						"excel-job"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "dgc_url",
+			"value": "https://dev.collibra.com",
+			"type": "string"
+		},
+		{
+			"key": "rest_endpoint",
+			"value": "/rest/2.0",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "Admin",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "admin",
+			"type": "string"
+		}
+	]
+}
