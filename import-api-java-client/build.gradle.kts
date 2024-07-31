@@ -31,10 +31,10 @@ dependencies {
     // Workaround for https://github.com/OpenAPITools/openapi-generator/issues/9602#issuecomment-859528250
     // Dependencies copied from openapi generated gradle build script
     implementation( "com.brsanthu:migbase64:2.2")
-    implementation( "com.fasterxml.jackson.core:jackson-annotations:2.10.3")
-    implementation( "com.fasterxml.jackson.core:jackson-core:2.10.3")
-    implementation( "com.fasterxml.jackson.core:jackson-databind:2.10.3")
-    implementation( "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3")
+    implementation( "com.fasterxml.jackson.core:jackson-annotations:2.17.2")
+    implementation( "com.fasterxml.jackson.core:jackson-core:2.17.2")
+    implementation( "com.fasterxml.jackson.core:jackson-databind:2.17.2")
+    implementation( "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
     implementation( "com.google.code.findbugs:jsr305:3.0.2")
     implementation( "io.github.openfeign:feign-core:11.10")
     implementation( "io.github.openfeign:feign-jackson:11.10")
