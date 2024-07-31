@@ -40,7 +40,7 @@ dependencies {
     implementation( "io.github.openfeign:feign-jackson:11.10")
     implementation( "io.github.openfeign:feign-slf4j:11.10")
     implementation( "io.github.openfeign.form:feign-form:3.8.0")
-    implementation ("io.swagger:swagger-annotations:1.5.24")
+    implementation ("io.swagger:swagger-annotations:1.6.14")
     implementation( "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.1")
     implementation( "org.openapitools:jackson-databind-nullable:0.2.1")
 }
