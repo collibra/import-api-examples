@@ -31,18 +31,18 @@ dependencies {
     // Workaround for https://github.com/OpenAPITools/openapi-generator/issues/9602#issuecomment-859528250
     // Dependencies copied from openapi generated gradle build script
     implementation( "com.brsanthu:migbase64:2.2")
-    implementation( "com.fasterxml.jackson.core:jackson-annotations:2.10.3")
-    implementation( "com.fasterxml.jackson.core:jackson-core:2.10.3")
-    implementation( "com.fasterxml.jackson.core:jackson-databind:2.10.3")
-    implementation( "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3")
+    implementation( "com.fasterxml.jackson.core:jackson-annotations:2.17.2")
+    implementation( "com.fasterxml.jackson.core:jackson-core:2.17.2")
+    implementation( "com.fasterxml.jackson.core:jackson-databind:2.17.2")
+    implementation( "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
     implementation( "com.google.code.findbugs:jsr305:3.0.2")
-    implementation( "io.github.openfeign:feign-core:11.0")
-    implementation( "io.github.openfeign:feign-jackson:11.0")
-    implementation( "io.github.openfeign:feign-slf4j:11.0")
+    implementation( "io.github.openfeign:feign-core:11.10")
+    implementation( "io.github.openfeign:feign-jackson:11.10")
+    implementation( "io.github.openfeign:feign-slf4j:11.10")
     implementation( "io.github.openfeign.form:feign-form:3.8.0")
-    implementation ("io.swagger:swagger-annotations:1.5.24")
+    implementation ("io.swagger:swagger-annotations:1.6.14")
     implementation( "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.2")
-    implementation( "org.openapitools:jackson-databind-nullable:0.2.1")
+    implementation( "org.openapitools:jackson-databind-nullable:0.2.6")
 }
 
 java {
