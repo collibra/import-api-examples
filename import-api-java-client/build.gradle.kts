@@ -8,7 +8,7 @@ val oasGenerateApiTests: String by project
 plugins {
     id("import-api-examples.java-conventions")
 
-    id("org.openapi.generator") version "4.3.1"
+    id("org.openapi.generator") version "7.7.0"
     id("org.jsonschema2dataclass") version "6.0.0"
 }
 
