@@ -1,0 +1,24 @@
+name: Snyk Open Source Test
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 0 * * *' # nightly at midnight
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+  snyk:
+    uses: collibra/snyk-templates/.github/workflows/snyk-gradle-jdk21-npm.yml@main
+    with:
+      snyk-org: "KnowledgeGraphEngine"
+      snyk-working-directory: ${{ inputs.snyk-working-directory }}
+      snyk-test-additional-params: ${{ inputs.snyk-test-additional-params }}
+    secrets: inherit
