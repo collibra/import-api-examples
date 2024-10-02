@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - 'release/**'
+      - DEV-103106-integrate-Snyk-without-npm
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron:  '0 0 * * *' # nightly at midnight
@@ -16,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
   snyk:
-    uses: collibra/snyk-templates/.github/workflows/snyk-gradle-jdk21-npm.yml@main
+    uses: collibra/snyk-templates/blob/main/.github/workflows/snyk-gradle.yml@main
     with:
       snyk-org: "KnowledgeGraphEngine"
       snyk-working-directory: ${{ inputs.snyk-working-directory }}
