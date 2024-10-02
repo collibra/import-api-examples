@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
   snyk:
-    uses: collibra/snyk-templates/.github/workflows/snyk-gradle.yml@main
+    uses: collibra/snyk-templates/.github/workflows/snyk-gradle-jdk21.yml@main
     with:
       snyk-org: "KnowledgeGraphEngine"
       snyk-working-directory: ${{ inputs.snyk-working-directory }}
