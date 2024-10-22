@@ -16,8 +16,8 @@ dependencies {
 
     implementation(project(":import-api-java-client"))
 
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.2")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.18.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.0")
     implementation("com.opencsv:opencsv:$openCsvVersion")
     implementation("org.slf4j:slf4j-api:+")
 
