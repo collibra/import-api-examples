@@ -8,7 +8,7 @@ val oasGenerateApiTests: String by project
 plugins {
     id("import-api-examples.java-conventions")
 
-    id("org.openapi.generator") version "7.7.0"
+    id("org.openapi.generator") version "7.14.0"
     id("org.jsonschema2dataclass") version "6.0.0"
 }
 
@@ -31,16 +31,16 @@ dependencies {
     // Workaround for https://github.com/OpenAPITools/openapi-generator/issues/9602#issuecomment-859528250
     // Dependencies copied from openapi generated gradle build script
     implementation( "com.brsanthu:migbase64:2.2")
-    implementation( "com.fasterxml.jackson.core:jackson-annotations:2.17.2")
-    implementation( "com.fasterxml.jackson.core:jackson-core:2.17.2")
-    implementation( "com.fasterxml.jackson.core:jackson-databind:2.17.2")
-    implementation( "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
+    implementation( "com.fasterxml.jackson.core:jackson-annotations:2.19.1")
+    implementation( "com.fasterxml.jackson.core:jackson-core:2.19.1")
+    implementation( "com.fasterxml.jackson.core:jackson-databind:2.19.1")
+    implementation( "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.1")
     implementation( "com.google.code.findbugs:jsr305:3.0.2")
-    implementation( "io.github.openfeign:feign-core:13.3")
-    implementation( "io.github.openfeign:feign-jackson:13.3")
-    implementation( "io.github.openfeign:feign-slf4j:13.3")
+    implementation( "io.github.openfeign:feign-core:13.6")
+    implementation( "io.github.openfeign:feign-jackson:13.6")
+    implementation( "io.github.openfeign:feign-slf4j:13.6")
     implementation( "io.github.openfeign.form:feign-form:3.8.0")
-    implementation ("io.swagger:swagger-annotations:1.6.14")
+    implementation ("io.swagger:swagger-annotations:1.6.16")
     implementation( "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.2")
     implementation( "org.openapitools:jackson-databind-nullable:0.2.6")
 }
