@@ -1,3 +1,3 @@
 tasks.wrapper {
-    gradleVersion = "8.9"
+    gradleVersion = "9.1.0"
 }
